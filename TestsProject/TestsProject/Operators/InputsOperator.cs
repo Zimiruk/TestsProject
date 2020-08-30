@@ -14,7 +14,8 @@ namespace TestsProject
 
                 if (key.Key == ConsoleKey.D1)
                 {
-                    TestConstructor.CreateTest();
+                    TestConstructor testConstructor = new TestConstructor();
+                    testConstructor.CreateTest();
                 }
 
                 else if (key.Key == ConsoleKey.D2)
@@ -25,7 +26,8 @@ namespace TestsProject
                     if (FilesOperator.CheckIfTestExists(testName))
                     {
                         Test test = FilesOperator.OpenTest(testName);
-                        TestRunner.RunTest(test);
+                        TestRunner testRunner = new TestRunner();
+                        testRunner.RunTest(test);
                     }
                     else
                     {

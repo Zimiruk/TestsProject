@@ -5,7 +5,7 @@ namespace TestsProject
 {
     class TestConstructor
     {
-        public static void CreateTest()
+        public void CreateTest()
         {
             Console.WriteLine("Enter test theme");
             string testTheme = Console.ReadLine();
@@ -27,7 +27,7 @@ namespace TestsProject
             }
         }
 
-        static void CreateQuestion(Test test)
+        private void CreateQuestion(Test test)
         {
             Console.WriteLine("Enter the content of the question");
 
@@ -38,7 +38,7 @@ namespace TestsProject
             AddOptionsToQuestion(question);
         }
 
-        static void AddOptionsToQuestion(Question question)
+        private void AddOptionsToQuestion(Question question)
         {
             Console.WriteLine("Add from 2 to 5 question answers");
 
@@ -66,7 +66,7 @@ namespace TestsProject
             Console.WriteLine("Question added");
         }
 
-        static bool CheckForRightAnswers(List<Answer> answers)
+        private bool CheckForRightAnswers(List<Answer> answers)
         {
             foreach (Answer answer in answers)
             {
@@ -77,7 +77,7 @@ namespace TestsProject
             return false;
         }
 
-        static void SetRightAnswers(Question question)
+        private void SetRightAnswers(Question question)
         {
             Console.WriteLine("There no right answers for current question");
 
@@ -117,7 +117,7 @@ namespace TestsProject
         }
 
 
-        static bool AnswerCheck(string input, List<Answer> answers)
+       private bool AnswerCheck(string input, List<Answer> answers)
         {
             int value;
 
