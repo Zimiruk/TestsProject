@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TestsProject
 {
-    class TestConstructor
+    public class TestConstructor
     {
         public void CreateTest()
         {
@@ -18,7 +18,6 @@ namespace TestsProject
                 {
                     CreateQuestion(test);
                 }
-
                 else
                 {
                     FilesOperator.SaveTest(test);
@@ -129,6 +128,5 @@ namespace TestsProject
 
             return false;
         }
-
     }
 }

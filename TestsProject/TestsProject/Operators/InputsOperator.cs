@@ -4,21 +4,20 @@ namespace TestsProject
 {
     public class InputsOperator
     {
-
         public static void ProcessStartInputs()
         {
             while (true)
             {
                 Console.WriteLine("Choose option \n 1 - Create new test \n 2 - Open existing test \n 3 - Exit");
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                ConsoleKeyInfo input = Console.ReadKey(true);
 
-                if (key.Key == ConsoleKey.D1)
+                if (input.Key == ConsoleKey.D1)
                 {
                     TestConstructor testConstructor = new TestConstructor();
                     testConstructor.CreateTest();
                 }
 
-                else if (key.Key == ConsoleKey.D2)
+                else if (input.Key == ConsoleKey.D2)
                 {
                     Console.WriteLine("Enter name of *.test file");
                     string testName = Console.ReadLine();
@@ -35,7 +34,7 @@ namespace TestsProject
                     }
                 }
 
-                else if (key.Key == ConsoleKey.D3)
+                else if (input.Key == ConsoleKey.D3)
                 {
                     break;
                 }
@@ -47,14 +46,14 @@ namespace TestsProject
             while (true)
             {
                 Console.WriteLine(message);
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                ConsoleKeyInfo input = Console.ReadKey(true);
 
-                if (key.Key == ConsoleKey.Y)
+                if (input.Key == ConsoleKey.Y)
                 {
                     return true;
                 }
 
-                else if (key.Key == ConsoleKey.N)
+                else if (input.Key == ConsoleKey.N)
                 {
                     return false;
                 }

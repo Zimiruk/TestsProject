@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace TestsProject
 {
     [Serializable]
-    class Test
+    public class Test
     {
         public string Theme { get; set; }
         List<string> SubThemes { get; set; }

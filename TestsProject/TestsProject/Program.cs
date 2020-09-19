@@ -1,8 +1,8 @@
 ﻿namespace TestsProject
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             InputsOperator.ProcessStartInputs();
         }
