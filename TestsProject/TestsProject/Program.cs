@@ -1,10 +1,10 @@
 ﻿namespace TestsProject
 {
-    class Program
-    { 
-        static void Main(string[] args)
-        {         
-            TestConstructor.CreateTest();
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            InputsOperator.ProcessStartInputs();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace TestsProject
 {
     [Serializable]
-    class Question
+    public class Question
     {
         public string QuestionContent { get; set; } 
         public List<Answer> Answers { get; set; }  
