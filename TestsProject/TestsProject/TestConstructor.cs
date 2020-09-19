@@ -103,7 +103,6 @@ namespace TestsProject
                             break;
                         }
                     }
-
                     else
                     {
                         Console.WriteLine("Bad input");

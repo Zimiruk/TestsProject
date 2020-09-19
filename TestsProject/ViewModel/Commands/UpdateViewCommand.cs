@@ -25,6 +25,11 @@ namespace ViewModel.Commands
             {
                 viewModel.SelectedViewModel = new CreateTestViewModel();
             }
+
+            else if (parameter.ToString() == "List")
+            {
+                viewModel.SelectedViewModel = new TestsListViewModel();
+            }
         }
     }
 }

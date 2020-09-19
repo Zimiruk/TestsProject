@@ -5,7 +5,7 @@ namespace ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
-        private BaseViewModel _selectedViewModel = new CreateTestViewModel();
+        private BaseViewModel _selectedViewModel = new TestsListViewModel();
 
         public BaseViewModel SelectedViewModel
         {
@@ -14,7 +14,6 @@ namespace ViewModel
             {
                 _selectedViewModel = value;
                 OnPropertyChanged(nameof(SelectedViewModel));
-
             }
         }
 
