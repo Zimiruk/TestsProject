@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TestsProject
+namespace Common.Models
 {
     [Serializable]
     public class Question
     {
         public string QuestionContent { get; set; }
+
         public List<Answer> Answers { get; set; }
 
-        public Question(string questionContent)
-        {
-            QuestionContent = questionContent;
-            Answers = new List<Answer>();
-        }
+        public bool IsOpen { get; set; }
     }
 }

@@ -3,7 +3,7 @@
 namespace TestsProject
 {
     [Serializable]
-    class Answer
+    public class Answer
     {
         public string Content { get; set; }
         public bool IsItRight { get; set; }
