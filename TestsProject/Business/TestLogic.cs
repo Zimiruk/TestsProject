@@ -6,7 +6,8 @@ namespace Business
 {
     public class TestsLogic
     {
-        TestFilesOperations operations = new TestFilesOperations();
+        private TestFilesOperations operations = new TestFilesOperations();
+        private StatisticLogic statisticLogic = new StatisticLogic();
 
         public void SaveTest(Test test)
         {
@@ -78,6 +79,8 @@ namespace Business
             }
 
             result = CreateResult(5, wrongChoises, testToCompare.Questions.Count);
+            statisticLogic.UpdateTestStatistic(testToCompare.Name);
+
             return wrongChoises;
         }
     }

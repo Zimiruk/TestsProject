@@ -31,7 +31,7 @@ namespace ViewModel.Models
                 testTheme = value;
                 OnPropertyChanged("TestTheme");
             }
-        }       
+        }
 
         public ObservableCollection<QuestionView> Questions { get; set; }
 

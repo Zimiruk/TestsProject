@@ -86,8 +86,6 @@ namespace ViewModel
             }
             set
             {
-
-                //ContentVisibility = true;
                 selectedQuestion = value;
                 OnPropertyChanged("SelectedQuestion");
                 ResultVisibility = false;
@@ -181,7 +179,6 @@ namespace ViewModel
 
                 SelectedQuestion = null;
                 ResultVisibility = true;
-
             }
         }
 

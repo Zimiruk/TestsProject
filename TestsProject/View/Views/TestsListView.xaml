@@ -55,7 +55,7 @@
                     <ColumnDefinition Width="83*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Test name: "></Label>
-                <Label x:Name="TestName" Grid.Column="1" Content="{Binding SelectedTestName}"></Label>
+                <Label x:Name="TestName" Grid.Column="1" Content="{Binding SelectedTest.TestName}"></Label>
             </Grid>
 
             <Grid Grid.Row="1">
@@ -64,7 +64,7 @@
                     <ColumnDefinition Width="83*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Test theme: "></Label>
-                <Label x:Name="TestTheme" Grid.Column="1" Content="Default theme name"></Label>
+                <Label x:Name="TestTheme" Grid.Column="1" Content="{Binding SelectedTest.TestTheme}"></Label>
             </Grid>
 
             <Grid Grid.Row="2">
@@ -77,7 +77,7 @@
                     <ColumnDefinition Width="191*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Questions amount: "></Label>
-                <Label x:Name="QuestionsAmount" Grid.Column="1" Content="0"></Label>
+                <Label x:Name="QuestionsAmount" Grid.Column="1" Content="{Binding QuestionsCount}"></Label>
             </Grid>
 
             <Grid Grid.Row="4">

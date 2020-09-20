@@ -3,13 +3,17 @@ using Common.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ViewModel.Commands;
+using ViewModel.Models;
 
 namespace ViewModel
 {
     public class TestsListViewModel : BaseViewModel
     {
-        private Test test;
         private TestsLogic testsLogic = new TestsLogic();
+        private StatisticLogic statisticLogic = new StatisticLogic();
+
+        private Test test;
+        private TestStatistic testStatistic;
 
         public TestsListViewModel()
         {
@@ -40,9 +44,57 @@ namespace ViewModel
                 test = testsLogic.GetTest(selectedTestName);
                 Execution.Test = test;
 
-                
+                SelectedTest.TestName = test.Name;
+                SelectedTest.TestTheme = test.Theme;
+
+                QuestionsCount = test.Questions.Count;
+
+                testStatistic = statisticLogic.GetTestStatistic(test.Name);
+                SelectedTestStatistic.AttempsCount = testStatistic.AttempsCount;
 
                 OnPropertyChanged("SelectedTestName");
+            }
+        }
+
+        private int questionsCount;
+        public int QuestionsCount
+        {
+            get
+            {
+                return questionsCount;
+            }
+            set
+            {
+                questionsCount = value;
+                OnPropertyChanged("QuestionsCount");
+            }
+        }
+
+        private TestView selectedTest = new TestView();
+        public TestView SelectedTest
+        {
+            get
+            {
+                return selectedTest;
+            }
+            set
+            {
+                selectedTest = value;
+                OnPropertyChanged("SelectedTest");
+            }
+        }
+
+        private TestStatisticView selectedTestStatistic = new TestStatisticView();
+        public TestStatisticView SelectedTestStatistic
+        {
+            get
+            {
+                return selectedTestStatistic;
+            }
+            set
+            {
+                selectedTestStatistic = value;
+                OnPropertyChanged("SelectedTestStatistic");
             }
         }
 
@@ -78,18 +130,6 @@ namespace ViewModel
                       ContentVisibility = true;
                   }));
             }
-        }
-
-        private RelayCommand showTestStatistic;
-        public RelayCommand ShowTestStatistic
-        {
-            get
-            {
-                return showTestContent ??
-                  (showTestContent = new RelayCommand(obj =>
-                  {               
-                  }));
-            }
-        }
+        }        
     }
 }
