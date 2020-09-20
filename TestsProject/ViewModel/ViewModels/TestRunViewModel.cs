@@ -88,6 +88,7 @@ namespace ViewModel
             {
                 selectedQuestion = value;
                 OnPropertyChanged("SelectedQuestion");
+
                 ResultVisibility = false;
             }
         }
@@ -134,12 +135,20 @@ namespace ViewModel
             test.Questions = new ObservableCollection<QuestionView>();
             foreach (Question question in TestToRun.Questions)
             {
-                QuestionView questionView = new QuestionView { QuestionContent = question.QuestionContent, Color = MyEnum.Status.Default };
+                QuestionView questionView = new QuestionView { QuestionContent = question.QuestionContent, Color = MyEnum.Status.Default, IsOpen = question.IsOpen };
                 test.Questions.Add(questionView);
 
                 foreach (Answer answer in question.Answers)
                 {
-                    questionView.Answers.Add(new AnswerView { AnswerContent = answer.Content, IsRight = false });
+                    if(questionView.IsOpen)
+                    {
+                        questionView.Answers.Add(new AnswerView { AnswerContent = "", IsRight = false });
+                    }
+
+                    else
+                    {
+                        questionView.Answers.Add(new AnswerView { AnswerContent = answer.Content, IsRight = false });
+                    }                        
                 }
             }
 
@@ -149,8 +158,10 @@ namespace ViewModel
 
         private void UpdateFormColors()
         {
+            ///TODO 4x if
             for (int i = 0; i < Questions.Count; i++)
-            {
+            {                
+
                 if (!wrongChoises.ContainsKey(i))
                 {
                     Questions[i].Color = MyEnum.Status.Right;
@@ -220,6 +231,8 @@ namespace ViewModel
 
         private void EndTest()
         {
+            timer.Stop();
+
             Result result;
             Test finishedTest = new Test();
 

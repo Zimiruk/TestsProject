@@ -126,6 +126,7 @@ namespace ViewModel
                       {
                           Question questionForSaving = new Question();
                           questionForSaving.QuestionContent = question.QuestionContent;
+                          questionForSaving.IsOpen = question.IsOpen;
                           questionForSaving.Answers = new List<Answer>();
 
                           foreach (AnswerView answer in question.Answers)
