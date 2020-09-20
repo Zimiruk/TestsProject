@@ -165,7 +165,6 @@ namespace ViewModel
                       {
                           SelectedQuestion = Questions[0];
                       }
-
                   }));
             }
         }
@@ -177,11 +176,14 @@ namespace ViewModel
             {
                 return saveTest ??
                   (saveTest = new RelayCommand(obj =>
-                  {
+                  {     
                       Test testForSaving = new Test();
 
                       testForSaving.Name = test.TestName;
                       testForSaving.Questions = new List<Question>();
+
+                      MessageBox.Show($"{test.TimerMinute}");
+                      testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;                 
 
                       foreach (QuestionView question in test.Questions)
                       {

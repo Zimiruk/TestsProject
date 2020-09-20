@@ -21,6 +21,10 @@ namespace ViewModel
             TestToRun = test;
             TestDone = false;
             FillTestViewWithContent();
+
+            seconds = TestToRun.TimerCountdown;
+            Time = TimeSpan.FromSeconds(seconds);
+
             LauchTimer();
         }
 
@@ -93,8 +97,10 @@ namespace ViewModel
             }
         }
 
-        private double time;
-        public double Time
+        private int seconds;
+
+        private TimeSpan time;
+        public TimeSpan Time
         {
             get
             {
@@ -212,17 +218,16 @@ namespace ViewModel
             timer.Interval = TimeSpan.FromMilliseconds(1000);
             timer.Tick += new EventHandler(TimerTick);
 
-            ///TODO Set timer time
-            Time = 5;
-
             timer.Start();
         }
 
 
         private void TimerTick(object sender, EventArgs e)
         {
-            Time -= 1;
-            if (Time == 0)
+            seconds -= 1;
+            Time = TimeSpan.FromSeconds(seconds);
+
+            if (seconds == 0)
             {
                 timer.Stop();
                 EndTest();

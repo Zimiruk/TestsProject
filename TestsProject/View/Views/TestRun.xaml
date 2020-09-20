@@ -133,7 +133,8 @@
                 <Grid Grid.Row="0" Margin="0,10,0,0">
                     <Label Margin="10,0,0,0" Content="Test name:" ></Label>
                     <TextBlock x:Name="TestNameBox" Text="{Binding Test.TestName}" Margin="78,5,-78,-5" />
-                    <TextBlock HorizontalAlignment="Left" Margin="903,-2,0,0" Text="{Binding Time}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="903,-2,0,0" Text="{Binding Time, StringFormat=mm\\:ss}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    
                 </Grid>
 
                 <Grid Grid.Row="1" Margin="0,0,0,4">
@@ -195,10 +196,8 @@
 
                         <TextBox x:Name="OpenAnswerItem" Text="{Binding SelectedQuestion.Answers[0].AnswerContent}" Width="800" >
                             <TextBox.Style>
-                                <Style TargetType="{x:Type TextBox}">
-                                    
+                                <Style TargetType="{x:Type TextBox}">                                    
                                     <Style.Triggers>
-
                                         <DataTrigger Binding="{Binding SelectedQuestion.Answers[0].Color}" Value="Default">
                                             <Setter  Property="Background" Value="White"/>
                                         </DataTrigger>
@@ -220,8 +219,7 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-
-
+                        
                         <ItemsControl ItemsSource="{Binding SelectedQuestion.Answers}">
                             <ItemsControl.Style>
                                 <Style TargetType="ItemsControl">
