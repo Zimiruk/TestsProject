@@ -24,6 +24,44 @@ namespace Business
             return operations.GetTest(testName);
         }
 
+        public CreationReport ValidateCreation(Test test)
+        {
+            CreationReport executionReport = new CreationReport();
+            executionReport.BadQuestions = new List<int>();
+
+            if(test.Questions.Count == 0)
+            {
+                executionReport.Result = false;
+                executionReport.Message += "No questions at all";
+
+                return executionReport;
+            }
+
+            for (int i = 0; i < test.Questions.Count; i++)
+            {
+                if (!test.Questions[i].Answers.Exists(x => x.IsItRight == true))
+                {
+                    executionReport.BadQuestions.Add(i);
+                    executionReport.Message += $"Question number {i + 1} does not have any right answer \n";
+                }
+            }
+
+            if (executionReport.BadQuestions.Count == 0)
+            {
+                executionReport.Message += "All fine";
+                executionReport.Result = true;
+            }
+
+            else
+            {
+                executionReport.Result = false;
+            }
+
+            return executionReport;
+        }
+
+
+
         private Result CreateResult(int rightAmount, Dictionary<int, List<int>> wrongChoises, int questionsAmount)
         {
             Result result = new Result();
@@ -58,8 +96,7 @@ namespace Business
                         wrongChoises.Add(i, new List<int> { 0 });
 
                     continue;
-                }          
-
+                }       
 
                 if (!finishedTest.Questions[i].Answers.Exists(x => x.IsItRight == true))
                 {

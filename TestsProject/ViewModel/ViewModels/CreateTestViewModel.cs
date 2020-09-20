@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using ViewModel.Commands;
 using ViewModel.Models;
 
 namespace ViewModel
 {
+    /// <summary>
+    /// TODO Other way to show messages
+    /// </summary>
     public class CreateTestViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private TestsLogic testsLogic = new TestsLogic();
@@ -102,9 +106,14 @@ namespace ViewModel
                 return addAnswer ??
                   (addAnswer = new RelayCommand(obj =>
                   {
-                      ///TODO MESSAGE ABOUT LIMIT
-                      if (selectedQuestion.Answers.Count <= 5)
-                          selectedQuestion.Answers.Add(new AnswerView() { AnswerContent = "Default", IsRight = true});
+                      if (selectedQuestion.Answers.Count == 5)
+                      {
+                          MessageBox.Show("5 answers is enough");
+                      }
+                      else
+                      {
+                          selectedQuestion.Answers.Add(new AnswerView() { AnswerContent = "Default", IsRight = true });
+                      }
                   }));
             }
         }
@@ -137,8 +146,20 @@ namespace ViewModel
                           testForSaving.Questions.Add(questionForSaving);
                       }
 
-                      ///TODO VALIDATION AND MESSAGE
-                      testsLogic.SaveTest(testForSaving);
+                      CreationReport creationReport = testsLogic.ValidateCreation(testForSaving);
+
+                      if (creationReport.Result)
+                      {
+                          testsLogic.SaveTest(testForSaving);
+                          MessageBox.Show("Test saved");
+                      }
+
+                      else
+                      {
+                          MessageBox.Show(creationReport.Message);
+                          if (creationReport.BadQuestions.Count != 0)
+                              selectedQuestion = Questions[creationReport.BadQuestions[0]];
+                      }
                   }));
             }
         }
