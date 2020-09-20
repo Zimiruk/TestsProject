@@ -16,6 +16,7 @@ namespace ViewModel
     public class CreateTestViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private TestsLogic testsLogic = new TestsLogic();
+        private StatisticLogic statisticLogic = new StatisticLogic();
 
         public CreateTestViewModel()
         {
@@ -53,6 +54,21 @@ namespace ViewModel
             }
         }
 
+        /// TODO change this
+        private bool addAnswerButtonVisibility = false;
+        public bool AddAnswerButtonVisibility
+        {
+            get
+            {
+                return addAnswerButtonVisibility;
+            }
+            set
+            {
+                addAnswerButtonVisibility = value;
+                OnPropertyChanged("AddAnswerButtonVisibility");
+            }
+        }
+
         private RelayCommand addQuestion;
         public RelayCommand AddQuestion
         {
@@ -61,6 +77,8 @@ namespace ViewModel
                 return addQuestion ??
                   (addQuestion = new RelayCommand(obj =>
                   {
+                      AddAnswerButtonVisibility = true;
+
                       QuestionView question = new QuestionView();
 
                       question.QuestionContent = "Default question";
@@ -84,6 +102,8 @@ namespace ViewModel
                 return addOpenQuestion ??
                   (addOpenQuestion = new RelayCommand(obj =>
                   {
+                      AddAnswerButtonVisibility = false;
+
                       QuestionView question = new QuestionView();
 
                       question.QuestionContent = "Default question";
@@ -118,6 +138,38 @@ namespace ViewModel
             }
         }
 
+        private RelayCommand removeAnswer;
+        public RelayCommand RemoveAnswer
+        {
+            get
+            {
+                return removeAnswer ??
+                  (removeAnswer = new RelayCommand(obj =>
+                  {
+                      SelectedQuestion.Answers.Remove(obj as AnswerView);
+                  }));
+            }
+        }
+
+        private RelayCommand removeQuestion;
+        public RelayCommand RemoveQuestion
+        {
+            get
+            {
+                return removeQuestion ??
+                  (removeQuestion = new RelayCommand(obj =>
+                  {
+                      Questions.Remove(SelectedQuestion);
+
+                      if (Questions.Count > 0)
+                      {
+                          SelectedQuestion = Questions[0];
+                      }
+
+                  }));
+            }
+        }
+
         private RelayCommand saveTest;
         public RelayCommand SaveTest
         {
@@ -148,17 +200,28 @@ namespace ViewModel
 
                       CreationReport creationReport = testsLogic.ValidateCreation(testForSaving);
 
+                      /// TODO 4x if
+                      /// TODO MessageBox
                       if (creationReport.Result)
                       {
-                          testsLogic.SaveTest(testForSaving);
-                          MessageBox.Show("Test saved");
+                          if (testsLogic.GetTest(testForSaving.Name) != null)
+                          {
+                              MessageBoxResult result = MessageBox.Show("Test with such name already exist \n You want to overwrite it with new one?", "Something happend", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                              if (result == MessageBoxResult.Yes)
+                              {                                  
+                                  testsLogic.SaveTest(testForSaving);
+                                  statisticLogic.DeleteStatistic(testForSaving.Name);
+                                  MessageBox.Show("Test saved");
+                              }                             
+                          }
                       }
 
                       else
                       {
                           MessageBox.Show(creationReport.Message);
                           if (creationReport.BadQuestions.Count != 0)
-                              selectedQuestion = Questions[creationReport.BadQuestions[0]];
+                              SelectedQuestion = Questions[creationReport.BadQuestions[0]];
                       }
                   }));
             }

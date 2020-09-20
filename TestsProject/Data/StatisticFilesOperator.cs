@@ -54,6 +54,14 @@ namespace Data
                 formatter.Serialize(fStream, testStatistic);
             }
         }
+
+        public void DeleteStatistic (string testName)
+        {
+            if (File.Exists($"TestsStatistic\\{testName}.dat"))
+            {
+                File.Delete($"TestsStatistic\\{testName}.dat");
+            }
+        }
     }
 }
 

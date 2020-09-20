@@ -41,5 +41,10 @@ namespace Business
                 statisticFiles.CreateTestStatistic(testStatistic);
             }
         }
+
+        public void DeleteStatistic(string testName)
+        {
+            statisticFiles.DeleteStatistic(testName);
+        }
     }
 }

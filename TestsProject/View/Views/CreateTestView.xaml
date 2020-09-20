@@ -7,36 +7,54 @@
         mc:Ignorable="d">
 
     <Grid DockPanel.Dock ="Left" Background ="AliceBlue" RenderTransformOrigin="0.356,0.483">
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="217*"/>
-            <RowDefinition Height="167*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
-        <Grid Grid.Column="0" Grid.RowSpan="2">
-            <StackPanel>
-                <Border BorderBrush="#FF6581FD" BorderThickness="0 0 0 1">
-                    <Label FontSize="14" Margin="10,11.5,0,0">
-                        Questions
-                    </Label>
-                </Border>
 
-                <ListBox ItemsSource="{Binding Questions}" SelectedItem="{Binding SelectedQuestion}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="Auto" MinHeight="720"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    Questions
+                </Label>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="37*"/>
+                        <RowDefinition Height="33*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0" Margin="0,6,10,3"  Command="{Binding AddOpenQuestion}">
+                        <TextBlock FontSize="11" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center">Add open question</TextBlock>
+                    </Button>
+                    <Button Grid.Row="1" Margin="0,6,10,6" Content="Add question"  Command="{Binding AddQuestion}"/>
+
+                </Grid>
+            </Grid>
+
+            <StackPanel Grid.Column="0" Grid.Row="1">
+                <ListBox  ItemsSource="{Binding Questions}" SelectedItem="{Binding SelectedQuestion}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel>
-                                <TextBlock Text="Question number"/>                  
+                                <TextBlock Text="Question number"/>
                             </WrapPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </StackPanel>
         </Grid>
-        
+
         <Border Grid.Column="0" BorderBrush="#FF6581FD"
         BorderThickness="4 0 4 0" Grid.RowSpan="2">
         </Border>
@@ -73,7 +91,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="60"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>
@@ -94,24 +112,44 @@
                 <Grid Grid.Row="1" Margin="0,0,0,4">
                     <TextBox x:Name="QuestionContent" Margin="28,8,135,0" Text="{Binding SelectedQuestion.QuestionContent}"/>
                     <Button Content="Save test" HorizontalAlignment="Left" Margin="960,28,0,0" VerticalAlignment="Top" Height="37" Width="69" Command="{Binding SaveTest}"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="960,77,0,0" Text="No Validation. Exception would not be handled" TextWrapping="Wrap" VerticalAlignment="Top" Height="121" Width="95"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="960,77,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="121" Width="95"/>
                 </Grid>
 
-                <Grid Grid.Row="2">                 
-                    <Button Content="Add question"  Margin="85,42,0,0"  Width="93"  Command="{Binding AddQuestion}"/>
-                    <Button  HorizontalAlignment="Left" Margin="85,42,0,0" VerticalAlignment="Top" Content="Add answer" Command="{Binding AddAnswer}" Width="93" />
-                    <Button  HorizontalAlignment="Left" Margin="230,42,0,0" VerticalAlignment="Top" Content="Add open question" Command="{Binding AddOpenQuestion}" Width="237" />
+                <Grid Grid.Row="2">
+                    <Button Content="Remove current question" HorizontalAlignment="Left" Margin="50 10 0 10 " Width="200" Command="{Binding RemoveQuestion}"/>
                 </Grid>
 
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="601*"/>
-                        <ColumnDefinition Width="32*"/>
-                        <ColumnDefinition Width="422*"/>
+                        <ColumnDefinition Width="93*"/>
+                        <ColumnDefinition Width="122*"/>
+                        <ColumnDefinition Width="134*"/>
+                        <ColumnDefinition Width="316*"/>
+                        <ColumnDefinition Width="390*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Name="lblSpellingInstructions" FontSize="14" Margin="10,10,0,0" Grid.ColumnSpan="3">
+                    <Label Name="AnswersLabel" FontSize="14" Margin="10,10,0,0" Grid.ColumnSpan="5">
                         Answers
                     </Label>
+                    <Button Grid.Column="1" Margin="10,15,0,0"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Add" Command="{Binding AddAnswer}" Width="90" Height="20">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AddAnswerButtonVisibility}"  Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AddAnswerButtonVisibility}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}"  Value="False">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>         
                 </Grid>
 
                 <Grid Grid.Row="4">
@@ -163,6 +201,23 @@
                                             </CheckBox.Style>
                                         </CheckBox>
                                         <TextBox Text="{Binding Path = AnswerContent}" Width="500" Margin="120,0,0,0"/>
+                                        <Button Content="Remove that answer" Command="{Binding DataContext.RemoveAnswer, RelativeSource={RelativeSource Mode=FindAncestor,
+                                                               AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DataContext.SelectedQuestion.IsOpen, RelativeSource={RelativeSource Mode=FindAncestor,
+                                                               AncestorType={x:Type ItemsControl}}}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.SelectedQuestion.IsOpen, RelativeSource={RelativeSource Mode=FindAncestor,
+                                                               AncestorType={x:Type ItemsControl}}}"  Value="False">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                     </WrapPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
