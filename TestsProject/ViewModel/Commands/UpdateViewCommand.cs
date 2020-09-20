@@ -21,14 +21,25 @@ namespace ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            if (parameter.ToString() == "Create")
+            ///TODO 
+            if (parameter is Parameter)
             {
-                viewModel.SelectedViewModel = new CreateTestViewModel();
+                Parameter param = (Parameter)parameter;
+
+                viewModel.SelectedViewModel = new TestRunViewModel(param.Test);
             }
 
-            else if (parameter.ToString() == "List")
+            else
             {
-                viewModel.SelectedViewModel = new TestsListViewModel();
+                if (parameter.ToString() == "Create")
+                {
+                    viewModel.SelectedViewModel = new CreateTestViewModel();
+                }
+
+                else if (parameter.ToString() == "List")
+                {
+                    viewModel.SelectedViewModel = new TestsListViewModel();
+                }
             }
         }
     }

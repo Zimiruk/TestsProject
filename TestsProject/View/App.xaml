@@ -13,6 +13,9 @@
         <DataTemplate DataType="{x:Type viewModels:TestsListViewModel}">
             <views:TestsListView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:TestRunViewModel}">
+            <views:TestRun/>
+        </DataTemplate>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <utility:BooleanToVisibilityConverter
         x:Key="BooleanToVisibilityConverter" 

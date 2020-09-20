@@ -50,7 +50,7 @@ namespace ViewModel
         public bool ContentVisibility
         {
             get
-            {
+            { 
                 return contentVisibility;
             }
 
