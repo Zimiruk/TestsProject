@@ -44,6 +44,17 @@ namespace ViewModel.Models
             }
         }
 
+        private bool showAnswerAtEnd;
+        public bool ShowAnswerAtEnd
+        {
+            get { return showAnswerAtEnd; }
+            set
+            {
+                showAnswerAtEnd = value;
+                OnPropertyChanged("ShowAnswerAtEnd");
+            }
+        }
+
         private int timerSecond;
         public int TimerSecond
         {

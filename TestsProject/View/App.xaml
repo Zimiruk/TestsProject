@@ -17,6 +17,7 @@
             <views:TestRun/>
         </DataTemplate>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <utility:BoolInverterConverter x:Key="BoolInverter"/>
         <utility:BooleanToVisibilityConverter
         x:Key="BooleanToVisibilityConverter" 
         True="Collapsed" 

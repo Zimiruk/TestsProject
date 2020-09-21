@@ -1,5 +1,6 @@
 ﻿using Business;
 using Common.Models;
+using Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ namespace ViewModel
         {
             test = new TestView();
             test.TestName = "Test";
+            test.ShowAnswerAtEnd = true;
 
             test.Questions = new ObservableCollection<QuestionView>();
         }
@@ -176,14 +178,13 @@ namespace ViewModel
             {
                 return saveTest ??
                   (saveTest = new RelayCommand(obj =>
-                  {     
+                  {
                       Test testForSaving = new Test();
 
                       testForSaving.Name = test.TestName;
                       testForSaving.Questions = new List<Question>();
-
-                      MessageBox.Show($"{test.TimerMinute}");
-                      testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;                 
+                      testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;
+                      testForSaving.ShowAnswerAtEnd = test.ShowAnswerAtEnd;
 
                       foreach (QuestionView question in test.Questions)
                       {
@@ -206,16 +207,24 @@ namespace ViewModel
                       /// TODO MessageBox
                       if (creationReport.Result)
                       {
-                          if (testsLogic.GetTest(testForSaving.Name) != null)
+                          ///TODO Fix that
+                          ///Use converter
+                          if (testsLogic.CheckIfFileExists(testForSaving.Name, Constants.TestPath, "test"))
                           {
                               MessageBoxResult result = MessageBox.Show("Test with such name already exist \n You want to overwrite it with new one?", "Something happend", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                               if (result == MessageBoxResult.Yes)
-                              {                                  
+                              {
                                   testsLogic.SaveTest(testForSaving);
                                   statisticLogic.DeleteStatistic(testForSaving.Name);
                                   MessageBox.Show("Test saved");
-                              }                             
+                              }
+                          }
+
+                          else
+                          {
+                              testsLogic.SaveTest(testForSaving);
+                              MessageBox.Show("Test saved");
                           }
                       }
 

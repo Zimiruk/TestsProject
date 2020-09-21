@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Common.Models;
+using Common;
 
 namespace Data
 {
@@ -87,6 +88,24 @@ namespace Data
                 Test test = (Test)formatter.Deserialize(fileStream);
                 return test;
             }
+        }
+
+        /// TODO DoSomething here
+        public bool CheckIfFileExists(string fileName, string fileDirectory, string fileExtention)
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(fileDirectory);
+
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+
+            if (File.Exists($"{fileDirectory}\\{fileName}.{fileExtention}"))
+            {
+                return true;
+            }
+
+            else return false;
         }
 
     }

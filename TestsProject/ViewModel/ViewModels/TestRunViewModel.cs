@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Threading;
 using ViewModel.Commands;
+using ViewModel.Utility;
 using ViewModel.Models;
 
 namespace ViewModel
@@ -25,7 +26,8 @@ namespace ViewModel
             seconds = TestToRun.TimerCountdown;
             Time = TimeSpan.FromSeconds(seconds);
 
-            LauchTimer();
+            if (TestToRun.TimerCountdown != 0)
+                LauchTimer();
         }
 
         public Test TestToRun { get; set; }
@@ -73,7 +75,7 @@ namespace ViewModel
                 OnPropertyChanged("ResultVisibility");
             }
         }
-      
+
         private TestView test;
         public TestView Test
         {
@@ -137,16 +139,28 @@ namespace ViewModel
         {
             test = new TestView();
             test.TestName = TestToRun.Name;
+            test.ShowAnswerAtEnd = TestToRun.ShowAnswerAtEnd;
 
             test.Questions = new ObservableCollection<QuestionView>();
-            foreach (Question question in TestToRun.Questions)
+
+            ///TODO Let it be here for now
+            //foreach (Question question in TestToRun.Questions)
+
+            for (int i = 0; i < TestToRun.Questions.Count; i++)
             {
-                QuestionView questionView = new QuestionView { QuestionContent = question.QuestionContent, Color = MyEnum.Status.Default, IsOpen = question.IsOpen };
+                QuestionView questionView = new QuestionView
+                {
+                    QuestionNumber = i,
+                    QuestionContent = TestToRun.Questions[i].QuestionContent,
+                    Color = MyEnum.Status.Default,
+                    IsOpen = TestToRun.Questions[i].IsOpen,
+                    IsCheсked = false
+                };
                 test.Questions.Add(questionView);
 
-                foreach (Answer answer in question.Answers)
+                foreach (Answer answer in TestToRun.Questions[i].Answers)
                 {
-                    if(questionView.IsOpen)
+                    if (questionView.IsOpen)
                     {
                         questionView.Answers.Add(new AnswerView { AnswerContent = "", IsRight = false });
                     }
@@ -154,7 +168,7 @@ namespace ViewModel
                     else
                     {
                         questionView.Answers.Add(new AnswerView { AnswerContent = answer.Content, IsRight = false });
-                    }                        
+                    }
                 }
             }
 
@@ -166,7 +180,7 @@ namespace ViewModel
         {
             ///TODO 4x if
             for (int i = 0; i < Questions.Count; i++)
-            {                
+            {
 
                 if (!wrongChoises.ContainsKey(i))
                 {
@@ -199,6 +213,57 @@ namespace ViewModel
             }
         }
 
+        /// TODO Use it for all questions
+        private void SetColorsToQuestion(QuestionResult questionResult)
+        {
+            int id = questionResult.QuestionId;
+
+            Questions[id].Color = MyEnum.Status.Right;
+
+            if (!questionResult.IsRight)
+                Questions[id].Color = MyEnum.Status.Wrong;
+
+            if (questionResult.IsOpen)
+            {
+                if (questionResult.IsRight)
+                {
+                    Questions[id].Answers[0].Color = MyEnum.Status.Right;
+                }
+
+                else
+                {
+                    Questions[id].Answers[0].Color = MyEnum.Status.Wrong;
+                }
+
+                return;
+            }
+
+            for (int j = 0; j < Questions[id].Answers.Count; j++)
+            {
+                if (!questionResult.NoChoises)
+                {
+                    if (questionResult.WrongAnswerChoises.Exists(x => x == j))
+                    {
+                        Questions[id].Answers[j].Color = MyEnum.Status.Wrong;
+                    }
+                }
+
+                else
+                {
+                    Questions[id].Answers[j].Color = MyEnum.Status.Wrong;
+                }
+
+                if (TestToRun.Questions[id].Answers[j].IsItRight)
+                {
+                    Questions[id].Answers[j].Color = MyEnum.Status.Right;
+                }
+            }
+
+            SelectedQuestion = null;
+            SelectedQuestion = Questions[id];
+        }
+
+
         private RelayCommand finishTest;
         public RelayCommand FinishTest
         {
@@ -212,8 +277,35 @@ namespace ViewModel
             }
         }
 
+        /// Check if possible to bind without id
+        private RelayCommand giveAnswer;
+        public RelayCommand GiveAnswer
+        {
+            get
+            {
+                return giveAnswer ??
+                  (giveAnswer = new RelayCommand(obj =>
+                  {
+                      QuestionView questionView = obj as QuestionView;
+                      Question question = ViewToDataConverter.QuestionConverter(questionView);
+
+                      int id = questionView.QuestionNumber;
+
+                      QuestionResult questionResult = testsLogic.CheckCurrentQuestion(question, TestToRun.Questions[id], id);
+                      SetColorsToQuestion(questionResult);
+
+                      SelectedQuestion.IsCheсked = true;
+
+                      SelectedQuestion = null;
+                      SelectedQuestion = Questions[id];
+
+                      
+                  }));
+            }
+        }
+
         private void LauchTimer()
-        {     
+        {
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(1000);
             timer.Tick += new EventHandler(TimerTick);
@@ -244,8 +336,11 @@ namespace ViewModel
             finishedTest.Name = test.TestName;
             finishedTest.Questions = new List<Question>();
 
+            /// TODO Use converter
             foreach (QuestionView question in test.Questions)
             {
+                question.IsCheсked = true;
+
                 Question questionForSaving = new Question();
                 questionForSaving.QuestionContent = question.QuestionContent;
                 questionForSaving.Answers = new List<Answer>();
@@ -276,12 +371,8 @@ namespace ViewModel
                   {
                       SelectedQuestion = null;
                       ResultVisibility = true;
-                      //ContentVisibility = false;
                   }));
             }
         }
-
-
-
     }
 }

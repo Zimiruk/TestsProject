@@ -134,7 +134,7 @@
                     <Label Margin="10,0,0,0" Content="Test name:" ></Label>
                     <TextBlock x:Name="TestNameBox" Text="{Binding Test.TestName}" Margin="78,5,-78,-5" />
                     <TextBlock HorizontalAlignment="Left" Margin="903,-2,0,0" Text="{Binding Time, StringFormat=mm\\:ss}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                    
+
                 </Grid>
 
                 <Grid Grid.Row="1" Margin="0,0,0,4">
@@ -192,12 +192,24 @@
         BorderThickness="0 0 0 1"/>
 
                 <Grid Grid.Row="5">
-                    <StackPanel  Margin="0,6,6,0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="760*"></ColumnDefinition>
+                        <ColumnDefinition Width="140*"></ColumnDefinition>
 
-                        <TextBox x:Name="OpenAnswerItem" Text="{Binding SelectedQuestion.Answers[0].AnswerContent}" Width="800" >
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,6,6,0" >
+                        <TextBox x:Name="OpenAnswerItem" Text="{Binding SelectedQuestion.Answers[0].AnswerContent}" Width="400" >
                             <TextBox.Style>
-                                <Style TargetType="{x:Type TextBox}">                                    
+                                <Style TargetType="{x:Type TextBox}">
                                     <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedQuestion.IsCheсked}" Value="True">
+                                            <Setter  Property="IsReadOnly" Value="True"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SelectedQuestion.IsCheсked}" Value="False">
+                                            <Setter  Property="IsReadOnly" Value="False"/>
+                                        </DataTrigger>
+                                        
                                         <DataTrigger Binding="{Binding SelectedQuestion.Answers[0].Color}" Value="Default">
                                             <Setter  Property="Background" Value="White"/>
                                         </DataTrigger>
@@ -214,12 +226,12 @@
                                         <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
-                                        
+
                                     </Style.Triggers>
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        
+
                         <ItemsControl ItemsSource="{Binding SelectedQuestion.Answers}">
                             <ItemsControl.Style>
                                 <Style TargetType="ItemsControl">
@@ -239,7 +251,18 @@
                                         <CheckBox IsChecked="{Binding IsRight}"  Margin="50,0,0,0">
                                             <CheckBox.Style>
                                                 <Style TargetType="{x:Type CheckBox}">
-                                                    <Style.Triggers>                                  
+                                                    <Style.Triggers>
+                                                        
+                                                        <DataTrigger Binding="{Binding DataContext.SelectedQuestion.IsCheсked, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}}" Value="True">
+                                                            <Setter Property="Focusable" Value="False"/>
+                                                            <Setter Property ="IsHitTestVisible" Value="False"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.SelectedQuestion.IsCheсked, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}}" Value="False">
+                                                            <Setter Property="Focusable" Value="True"/>
+                                                            <Setter Property ="IsHitTestVisible" Value="True"/>
+                                                        </DataTrigger>
+                                                        
+                                                        <!--
                                                         <DataTrigger Binding="{Binding DataContext.TestDone, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}}" Value="True">
                                                             <Setter Property="Focusable" Value="False"/>
                                                             <Setter Property ="IsHitTestVisible" Value="False"/>
@@ -248,6 +271,8 @@
                                                             <Setter Property="Focusable" Value="True"/>
                                                             <Setter Property ="IsHitTestVisible" Value="True"/>
                                                         </DataTrigger>
+                                                        -->
+                                                        
                                                     </Style.Triggers>
                                                 </Style>
                                             </CheckBox.Style>
@@ -270,19 +295,47 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
 
-                <Button x:Name="FinishButton" Content="FinishTest" HorizontalAlignment="Left" Margin="900,120,0,0" Grid.Row="5" VerticalAlignment="Top"  Height="29" Width="62" Command="{Binding FinishTest}">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding TestDone}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                        <Button x:Name="OnRunAnswerButton" Grid.Row="0" Content="Give an answer" Height="30" Width="100" Command="{Binding GiveAnswer}" CommandParameter="{Binding SelectedQuestion}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedQuestion.IsCheсked}" Value="True">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SelectedQuestion.IsCheсked}" Value="False">
+                                            <Setter Property="IsEnabled" Value="True" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Test.ShowAnswerAtEnd}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Test.ShowAnswerAtEnd}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button x:Name="FinishButton" Grid.Row="1" Content="FinishTest"  Height="30" Width="80" Command="{Binding FinishTest}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding TestDone}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

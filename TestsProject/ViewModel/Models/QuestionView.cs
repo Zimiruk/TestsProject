@@ -7,6 +7,17 @@ namespace ViewModel.Models
 {
     public class QuestionView : INotifyPropertyChanged
     {
+        private int questionNumber;
+        public int QuestionNumber
+        {
+            get { return questionNumber; }
+            set
+            {
+                questionNumber = value;
+                OnPropertyChanged("QuestionNumber");
+            }
+        }
+
         public QuestionView()
         {
             this.Answers = new ObservableCollection<AnswerView>();
@@ -50,6 +61,21 @@ namespace ViewModel.Models
                 OnPropertyChanged("Color");
             }
         }
+
+        private bool isCheсked;
+        public bool IsCheсked
+        {
+            get
+            {
+                return isCheсked;
+            }
+            set
+            {
+                isCheсked = value;
+                OnPropertyChanged("IsCheсked");
+            }
+        }
+
 
         public ObservableCollection<AnswerView> Answers { get; set; }       
 

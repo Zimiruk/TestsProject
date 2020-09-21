@@ -24,12 +24,17 @@ namespace Business
             return operations.GetTest(testName);
         }
 
+        public bool CheckIfFileExists(string fileName, string fileDirectory, string fileExtention)
+        {
+            return operations.CheckIfFileExists(fileName, fileDirectory, fileExtention);     
+        }
+
         public CreationReport ValidateCreation(Test test)
         {
             CreationReport executionReport = new CreationReport();
             executionReport.BadQuestions = new List<int>();
 
-            if(test.Questions.Count == 0)
+            if (test.Questions.Count == 0)
             {
                 executionReport.Result = false;
                 executionReport.Message += "No questions at all";
@@ -60,8 +65,6 @@ namespace Business
             return executionReport;
         }
 
-
-
         private Result CreateResult(int rightAmount, Dictionary<int, List<int>> wrongChoises, int questionsAmount)
         {
             Result result = new Result();
@@ -89,14 +92,14 @@ namespace Business
 
             ///TODO Change that 4x if 
             for (int i = 0; i < testToCompare.Questions.Count; i++)
-            {                
+            {
                 if (testToCompare.Questions[i].IsOpen)
                 {
-                    if(!(testToCompare.Questions[i].Answers[0].Content == finishedTest.Questions[i].Answers[0].Content))
+                    if (!(testToCompare.Questions[i].Answers[0].Content == finishedTest.Questions[i].Answers[0].Content))
                         wrongChoises.Add(i, new List<int> { 0 });
 
                     continue;
-                }       
+                }
 
                 if (!finishedTest.Questions[i].Answers.Exists(x => x.IsItRight == true))
                 {
@@ -128,6 +131,50 @@ namespace Business
             statisticLogic.UpdateTestStatistic(testToCompare.Name);
 
             return wrongChoises;
+        }
+
+        /// TODO Use this with all questions method
+        public QuestionResult CheckCurrentQuestion(Question questionWithChoses, Question questionToCompare, int id)
+        {
+            QuestionResult questionResult = new QuestionResult {QuestionId = id, IsRight = true, IsOpen = false, NoChoises = false };
+
+            if (!questionWithChoses.Answers.Exists(x => x.IsItRight == true))
+            {
+                questionResult.NoChoises = true;
+                questionResult.IsRight = false;
+            }
+
+            if (questionToCompare.IsOpen)
+            {
+                questionResult.IsOpen = true;
+
+                if (!(questionToCompare.Answers[0].Content == questionWithChoses.Answers[0].Content))
+                {
+                    questionResult.IsRight = false;
+                    return questionResult;
+                }
+
+                return questionResult;
+            }
+
+            for (int i = 0; i < questionToCompare.Answers.Count; i++)
+            {
+                if (questionToCompare.Answers[i].IsItRight != questionWithChoses.Answers[i].IsItRight && !questionToCompare.Answers[i].IsItRight)
+                {
+                    questionResult.IsRight = false;
+
+                    if (questionResult.WrongAnswerChoises != null)
+                    {
+                        questionResult.WrongAnswerChoises.Add(i);
+                    }
+                    else
+                    {
+                        questionResult.WrongAnswerChoises = new List<int>();
+                        questionResult.WrongAnswerChoises.Add(i);
+                    }
+                }
+            }
+            return questionResult;
         }
     }
 }

@@ -113,18 +113,38 @@
                 <Grid Grid.Row="1" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"></ColumnDefinition>
-                        <ColumnDefinition Width="28"></ColumnDefinition>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="100"></ColumnDefinition>
                         <ColumnDefinition Width="40"></ColumnDefinition>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="40"></ColumnDefinition>
+                        <ColumnDefinition Width="350"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0" Margin="10,0,0,0" Content="Timer minutes: " />
-                    <TextBox x:Name="Minutes" Grid.Column="1" Text="{Binding Test.TimerMinute}" Grid.ColumnSpan="2">
+                    <TextBox x:Name="Minutes" Grid.Column="1" Text="{Binding Test.TimerMinute}">
                        
                     </TextBox>
-                    <Label Grid.Column="3" Margin="10,0,0,0" Content="Timer seconds: " ></Label>
-                    <TextBox x:Name="Seconds" Grid.Column="4" Text="{Binding Test.TimerSecond}"/>
+                    <Label Grid.Column="2" Margin="10,0,0,0" Content="Timer seconds: " ></Label>
+                    <TextBox x:Name="Seconds" Grid.Column="3" Text="{Binding Test.TimerSecond}"/>
+
+                    <Grid Grid.Column="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Margin="10,0,0,0" Content="Show the correct answer:" ></Label>
+                        <Grid  Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <RadioButton Grid.Row="0" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd}" Content="at the end"/>
+                            <RadioButton Grid.Row="1" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd, Converter={StaticResource BoolInverter}}" Content="immediately" />
+                        </Grid>
+                        
+
+                    </Grid>
+
+    
                 </Grid>
 
                 <Grid Grid.Row="2" Margin="0,0,0,4">
@@ -214,7 +234,7 @@
                     </Label>
                 </Grid>
 
-                <Grid Grid.Row="5">
+                <Grid Grid.Row="6">
                     <StackPanel  Margin="0,0,6,0" >
                         <ItemsControl ItemsSource="{Binding SelectedQuestion.Answers}">
                             <ItemsControl.ItemTemplate>

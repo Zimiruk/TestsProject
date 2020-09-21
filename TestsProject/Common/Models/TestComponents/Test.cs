@@ -15,5 +15,7 @@ namespace Common.Models
         public List<Question> Questions { get; set; }
 
         public int TimerCountdown { get; set; }
+
+        public bool ShowAnswerAtEnd;
     }
 }
