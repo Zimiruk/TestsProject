@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d">
-    
+
     <Grid DockPanel.Dock ="Left" Background ="AliceBlue" RenderTransformOrigin="0.356,0.483">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -106,7 +106,7 @@
 
                     <Label Grid.Column="0" Margin="10,0,0,0" Content="Test name: " ></Label>
                     <Label Grid.Column="1" Margin="10,0,0,0" Content="Test theme: " ></Label>
-                    <TextBox Text="{Binding Test.TestName}" Grid.Column="1" Margin="87,3,134,-3"/>
+                    <TextBox Text="{Binding Test.TestName}" Grid.Column="1" Margin="88,3,140,-3"/>
                     <TextBox Text="{Binding Test.TestName}" Margin="88,0,134,0"/>
                 </Grid>
 
@@ -116,12 +116,14 @@
                         <ColumnDefinition Width="40"></ColumnDefinition>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="40"></ColumnDefinition>
-                        <ColumnDefinition Width="350"></ColumnDefinition>
+                        <ColumnDefinition Width="321"></ColumnDefinition>
+                        <ColumnDefinition Width="103*"></ColumnDefinition>
+                        <ColumnDefinition Width="217*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0" Margin="10,0,0,0" Content="Timer minutes: " />
                     <TextBox x:Name="Minutes" Grid.Column="1" Text="{Binding Test.TimerMinute}">
-                       
+
                     </TextBox>
                     <Label Grid.Column="2" Margin="10,0,0,0" Content="Timer seconds: " ></Label>
                     <TextBox x:Name="Seconds" Grid.Column="3" Text="{Binding Test.TimerSecond}"/>
@@ -132,19 +134,30 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Margin="10,0,0,0" Content="Show the correct answer:" ></Label>
-                        <Grid  Grid.Column="1">
+                        <Grid Grid.ColumnSpan="2" Margin="160,0,63,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition></RowDefinition>
                                 <RowDefinition></RowDefinition>
                             </Grid.RowDefinitions>
-                            <RadioButton Grid.Row="0" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd}" Content="at the end"/>
-                            <RadioButton Grid.Row="1" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd, Converter={StaticResource BoolInverter}}" Content="immediately" />
+                            <RadioButton Grid.Row="0" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd}" Content="at the end" HorizontalAlignment="Left" Width="90"/>
+                            <RadioButton Grid.Row="1" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd, Converter={StaticResource BoolInverter}}" Content="immediately" HorizontalAlignment="Left" Width="90"/>
                         </Grid>
-                        
 
+                        
+             
                     </Grid>
 
-    
+                    <Label Grid.Column="5" Margin="10,0,0,0" Content="Right answers to pass: " ></Label>
+                    <TextBox x:Name="RightAmount" Grid.Column="6" Width="40" HorizontalAlignment="Left">
+                        <TextBox.Text>
+                            <Binding Path="Test.ToPassAmount">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
                 </Grid>
 
                 <Grid Grid.Row="2" Margin="0,0,0,4">
@@ -162,7 +175,8 @@
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding Path=(Validation.HasError), ElementName=Minutes}" Value="False"/>
                                             <Condition Binding="{Binding Path=(Validation.HasError), ElementName=Seconds}" Value="False"/>
-                                        </MultiDataTrigger.Conditions> 
+                                            <Condition Binding="{Binding Path=(Validation.HasError), ElementName=RightAmount}" Value="False"/>
+                                        </MultiDataTrigger.Conditions>
                                         <Setter Property="IsEnabled" Value="True"/>
                                     </MultiDataTrigger>
                                 </Style.Triggers>

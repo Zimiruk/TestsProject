@@ -25,19 +25,32 @@ namespace Business
             }
         }
 
-        /// TODO Right answers, success count etc
+        /// TODO Procents and mb something else
         public void UpdateTestStatistic(string testName, TestResult testResult)
         {
             if (statisticFiles.CheckIfFileExists(testName, "TestsStatistic", "dat"))
             {
                 TestStatistic testStatistic = statisticFiles.OpenTestStatistic(testName);
                 testStatistic.AttempsCount++;
+                testStatistic.RightAnswersCount.Add(testResult.AmountOfRight);
+
+                if(testResult.Passed)
+                {
+                    testStatistic.SuccessCount++;
+                }
+
                 statisticFiles.SaveTestStatistic(testStatistic);
             }
 
             else
-            {
-                TestStatistic testStatistic = new TestStatistic() { TestName = testName, AttempsCount = 1, RightAnswersCount = new List<int> { 0 }, SuccessCount = 0 };
+            {   
+                TestStatistic testStatistic = new TestStatistic() { TestName = testName, AttempsCount = 1, RightAnswersCount = new List<int>() { testResult.AmountOfRight }};
+
+                if (testResult.Passed)
+                {
+                    testStatistic.SuccessCount++;
+                }
+
                 statisticFiles.CreateTestStatistic(testStatistic);
             }
         }

@@ -100,9 +100,33 @@
                     <ColumnDefinition Width="20*"></ColumnDefinition>
                     <ColumnDefinition Width="83*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" FontFamily="Arial Black" FontSize="16">
+                    <Label.Style>
+                        <Style TargetType="Label">                         
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding TestResult.Passed}" Value="True">
+                                   <Setter Property="Content" Value="PASSED"/>
+                                    <Setter Property="Foreground" Value="#67E85C"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding TestResult.Passed}" Value="False">
+                              <Setter Property="Content" Value="FAILED"/>
+                                <Setter  Property="Foreground" Value="#FF6E6E"/> 
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*"></ColumnDefinition>
+                    <ColumnDefinition Width="83*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Right answers: "></Label>
                 <Label x:Name="TestTheme" Grid.Column="1" Content="{Binding TestResult.Message}"></Label>
             </Grid>
+
         </Grid>
 
 
@@ -209,7 +233,7 @@
                                         <DataTrigger Binding="{Binding SelectedQuestion.IsCheсked}" Value="False">
                                             <Setter  Property="IsReadOnly" Value="False"/>
                                         </DataTrigger>
-                                        
+
                                         <DataTrigger Binding="{Binding SelectedQuestion.Answers[0].Color}" Value="Default">
                                             <Setter  Property="Background" Value="White"/>
                                         </DataTrigger>
@@ -252,7 +276,7 @@
                                             <CheckBox.Style>
                                                 <Style TargetType="{x:Type CheckBox}">
                                                     <Style.Triggers>
-                                                        
+
                                                         <DataTrigger Binding="{Binding DataContext.SelectedQuestion.IsCheсked, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}}" Value="True">
                                                             <Setter Property="Focusable" Value="False"/>
                                                             <Setter Property ="IsHitTestVisible" Value="False"/>
@@ -261,7 +285,7 @@
                                                             <Setter Property="Focusable" Value="True"/>
                                                             <Setter Property ="IsHitTestVisible" Value="True"/>
                                                         </DataTrigger>
-                                                        
+
                                                         <!--
                                                         <DataTrigger Binding="{Binding DataContext.TestDone, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}}" Value="True">
                                                             <Setter Property="Focusable" Value="False"/>
@@ -272,7 +296,7 @@
                                                             <Setter Property ="IsHitTestVisible" Value="True"/>
                                                         </DataTrigger>
                                                         -->
-                                                        
+
                                                     </Style.Triggers>
                                                 </Style>
                                             </CheckBox.Style>

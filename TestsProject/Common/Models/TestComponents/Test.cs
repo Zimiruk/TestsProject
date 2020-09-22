@@ -16,6 +16,8 @@ namespace Common.Models
 
         public int TimerCountdown { get; set; }
 
-        public bool ShowAnswerAtEnd;
+        public bool ShowAnswerAtEnd { get; set; }
+
+        public int ToPassAmount { get; set; }
     }
 }

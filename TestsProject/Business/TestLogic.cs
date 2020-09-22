@@ -105,7 +105,7 @@ namespace Business
             }
 
             //TODO RightQuestionsCount
-            TestResult testResult = CreateResult(5, questionsResult);
+            TestResult testResult = CreateResult(testToCompare.ToPassAmount, questionsResult);
             testResult.QuestionsResult = questionsResult;
 
             statisticLogic.UpdateTestStatistic(testToCompare.Name, testResult);

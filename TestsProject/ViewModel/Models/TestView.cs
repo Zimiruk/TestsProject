@@ -1,17 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace ViewModel.Models
 {
-    public class TestView : INotifyPropertyChanged
+    public class TestView : INotifyPropertyChanged, IDataErrorInfo
     {
         public TestView()
         {
             this.Questions = new ObservableCollection<QuestionView>();
         }
 
-        private string testName;   
+        private string testName;
         public string TestName
         {
             get { return testName; }
@@ -73,6 +74,35 @@ namespace ViewModel.Models
             }
         }
 
+        private int toPassAmount;
+        public int ToPassAmount
+        {
+            get { return toPassAmount; }
+            set
+            {
+                toPassAmount = value;
+                OnPropertyChanged("ToPassAmount");
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "ToPassAmount":
+                        if (toPassAmount > this.Questions.Count)
+                        {
+                            error = $"{toPassAmount} more than that test quesitons amount";
+                        }
+                        break;
+                }
+                return error;
+            }
+        }
+
         public ObservableCollection<QuestionView> Questions { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -80,6 +110,11 @@ namespace ViewModel.Models
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

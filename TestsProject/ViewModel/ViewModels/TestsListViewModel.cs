@@ -50,11 +50,12 @@ namespace ViewModel
 
                 SelectedTest.TestName = test.Name;
                 SelectedTest.TestTheme = test.Theme;
-
+                
                 QuestionsCount = test.Questions.Count;
 
                 testStatistic = statisticLogic.GetTestStatistic(test.Name);
                 SelectedTestStatistic.AttempsCount = testStatistic.AttempsCount;
+                SelectedTestStatistic.
 
                 OnPropertyChanged("SelectedTestName");
             }

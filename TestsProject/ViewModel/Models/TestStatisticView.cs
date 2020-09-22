@@ -19,6 +19,20 @@ namespace ViewModel.Models
             }
         }
 
+        private int successCount;
+        public int SuccessCount
+        {
+            get
+            {
+                return successCount;
+            }
+            set
+            {
+                successCount = value;
+                OnPropertyChanged("SuccessCount");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

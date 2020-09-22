@@ -67,6 +67,7 @@ namespace ViewModel
                       testForSaving.Questions = new List<Question>();
                       testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;
                       testForSaving.ShowAnswerAtEnd = test.ShowAnswerAtEnd;
+                      testForSaving.ToPassAmount = test.ToPassAmount;
 
                       foreach (QuestionView question in test.Questions)
                       {
