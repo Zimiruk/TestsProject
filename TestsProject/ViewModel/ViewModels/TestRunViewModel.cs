@@ -17,6 +17,8 @@ namespace ViewModel
         private TestsLogic testsLogic = new TestsLogic();
         private DispatcherTimer timer = new DispatcherTimer();
 
+        private TestResult testResult;
+
         public TestRunViewModel(Test test)
         {
             TestToRun = test;
@@ -38,20 +40,6 @@ namespace ViewModel
             get { return test; }
         }
 
-        private TestResult testResult;
-        public TestResult TestResult
-        {
-            get
-            {
-                return testResult;
-            }
-            set
-            {
-                testResult = value;
-                OnPropertyChanged("TestResult");
-            }
-        }
-
         public ObservableCollection<QuestionView> Questions
         {
             get
@@ -60,7 +48,7 @@ namespace ViewModel
             }
         }
 
-       
+
         private QuestionView selectedQuestion;
         public QuestionView SelectedQuestion
         {
@@ -105,7 +93,7 @@ namespace ViewModel
                 OnPropertyChanged("SelectedStyle");
             }
         }
-     
+
         #region [ Style Properties ]
 
         private bool testDone;
@@ -138,6 +126,18 @@ namespace ViewModel
 
         #endregion
 
+
+        private BaseViewModel _testRunContent;
+
+        public BaseViewModel TestRunContent
+        {
+            get { return _testRunContent; }
+            set
+            {
+                _testRunContent = value;
+                OnPropertyChanged(nameof(TestRunContent));
+            }
+        }       
 
         private void FillTestViewWithContent()
         {
@@ -179,7 +179,7 @@ namespace ViewModel
 
         private void UpdateFormColors()
         {
-            foreach(QuestionResult questionResult in TestResult.QuestionsResult)
+            foreach (QuestionResult questionResult in testResult.QuestionsResult)
             {
                 SetColorsToQuestion(questionResult);
             }
@@ -213,7 +213,7 @@ namespace ViewModel
             }
 
             for (int j = 0; j < Questions[id].Answers.Count; j++)
-            {          
+            {
                 if (!questionResult.NoChoises && !questionResult.IsRight)
                 {
                     if (questionResult.WrongAnswerChoises.Exists(x => x == j))
@@ -272,7 +272,7 @@ namespace ViewModel
 
                       SelectedQuestion = null;
                       SelectedQuestion = Questions[id];
-                      
+
                   }));
             }
         }
@@ -325,9 +325,10 @@ namespace ViewModel
                 finishedTest.Questions.Add(questionForSaving);
             }
 
-            TestResult = testsLogic.FinishTest(finishedTest, TestToRun);            
+            testResult = testsLogic.FinishTest(finishedTest, TestToRun);
             TestDone = true;
             UpdateFormColors();
+            TestRunContent = new TestResultViewModel(testResult);
         }
 
 
@@ -341,6 +342,7 @@ namespace ViewModel
                   {
                       SelectedQuestion = null;
                       ResultVisibility = true;
+                      TestRunContent = new TestResultViewModel(testResult);
                   }));
             }
         }

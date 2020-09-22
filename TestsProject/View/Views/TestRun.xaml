@@ -65,7 +65,7 @@
             <Border Grid.Column="0" BorderBrush="#FF6581FD" BorderThickness="4 0" Grid.ColumnSpan="2"></Border>
         </Grid>
 
-        <Grid x:Name="TestResult" Grid.Column="1">
+        <Grid x:Name="TestResult" Grid.Column="1">              
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
@@ -78,57 +78,9 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"></ColumnDefinition>
-                    <ColumnDefinition Width="83*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Results"></Label>
-            </Grid>
-
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20*"></ColumnDefinition>
-                    <ColumnDefinition Width="83*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" FontFamily="Arial Black" FontSize="16">
-                    <Label.Style>
-                        <Style TargetType="Label">                         
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding TestResult.Passed}" Value="True">
-                                   <Setter Property="Content" Value="PASSED"/>
-                                    <Setter Property="Foreground" Value="#67E85C"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding TestResult.Passed}" Value="False">
-                              <Setter Property="Content" Value="FAILED"/>
-                                <Setter  Property="Foreground" Value="#FF6E6E"/> 
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Label.Style>
-                </Label>
-            </Grid>
-
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20*"></ColumnDefinition>
-                    <ColumnDefinition Width="83*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Right answers: "></Label>
-                <Label x:Name="TestTheme" Grid.Column="1" Content="{Binding TestResult.Message}"></Label>
-            </Grid>
-
+            <ContentControl Content="{Binding TestRunContent}">
+            </ContentControl>
         </Grid>
-
 
         <Grid x:Name="TestContent" Grid.Column="1">
             <Grid.Style>
