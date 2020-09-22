@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:View"
              xmlns:views="clr-namespace:View.Views"
              xmlns:viewModels = "clr-namespace:ViewModel;assembly=ViewModel"
-             xmlns:utility = "clr-namespace:ViewModel;assembly=ViewModel"
+             xmlns:utility = "clr-namespace:ViewModel.Utility;assembly=ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type viewModels:CreateTestViewModel}">

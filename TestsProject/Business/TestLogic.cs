@@ -1,5 +1,6 @@
 ﻿using Common.Models;
 using Data;
+using System;
 using System.Collections.Generic;
 
 namespace Business
@@ -65,72 +66,51 @@ namespace Business
             return executionReport;
         }
 
-        private Result CreateResult(int rightAmount, Dictionary<int, List<int>> wrongChoises, int questionsAmount)
+        /// TODO Not sure
+        private TestResult CreateResult(int rightAmount, List<QuestionResult> questionsResult)
         {
-            Result result = new Result();
-            result.AmountOfRight = rightAmount;
-            int rightAnswersCount = questionsAmount - wrongChoises.Count;
+            TestResult testResult = new TestResult();            
 
-            if (rightAmount > rightAnswersCount)
+            int wrongChoisesCount = 0;
+            foreach(QuestionResult questionResult in questionsResult)
             {
-                result.Passed = false;
+                if (!questionResult.IsRight)
+                    wrongChoisesCount++;
+            }
+
+            testResult.AmountOfRight = questionsResult.Count - wrongChoisesCount;
+
+            if (rightAmount > testResult.AmountOfRight)
+            {
+                testResult.Passed = false;
             }
 
             else
             {
-                result.Passed = true;
+                testResult.Passed = true;
             }
 
-            result.Message = $"{rightAnswersCount} / {questionsAmount}";
-            return result;
+            testResult.Message = $"{testResult.AmountOfRight} / {questionsResult.Count}";
+            return testResult;
         }
 
 
-        public Dictionary<int, List<int>> FinishTest(Test finishedTest, Test testToCompare, out Result result)
-        {
-            Dictionary<int, List<int>> wrongChoises = new Dictionary<int, List<int>>();
+        public TestResult FinishTest(Test finishedTest, Test testToCompare)
+        {    
+            List<QuestionResult> questionsResult = new List<QuestionResult>();
 
-            ///TODO Change that 4x if 
             for (int i = 0; i < testToCompare.Questions.Count; i++)
             {
-                if (testToCompare.Questions[i].IsOpen)
-                {
-                    if (!(testToCompare.Questions[i].Answers[0].Content == finishedTest.Questions[i].Answers[0].Content))
-                        wrongChoises.Add(i, new List<int> { 0 });
-
-                    continue;
-                }
-
-                if (!finishedTest.Questions[i].Answers.Exists(x => x.IsItRight == true))
-                {
-                    wrongChoises.Add(i, new List<int>());
-                }
-
-                else
-                {
-                    for (int j = 0; j < testToCompare.Questions[i].Answers.Count; j++)
-                    {
-                        if (testToCompare.Questions[i].Answers[j].IsItRight != finishedTest.Questions[i].Answers[j].IsItRight && !testToCompare.Questions[i].Answers[j].IsItRight)
-                        {
-                            if (!wrongChoises.ContainsKey(i))
-                            {
-                                wrongChoises.Add(i, new List<int>());
-                                wrongChoises[i].Add(j);
-                            }
-                            else
-                            {
-                                wrongChoises[i].Add(j);
-                            }
-                        }
-                    }
-
-                }
+                questionsResult.Add(CheckCurrentQuestion(finishedTest.Questions[i], testToCompare.Questions[i], i));
             }
 
-            result = CreateResult(5, wrongChoises, testToCompare.Questions.Count);
-            statisticLogic.UpdateTestStatistic(testToCompare.Name);
+            //TODO RightQuestionsCount
+            TestResult testResult = CreateResult(5, questionsResult);
+            testResult.QuestionsResult = questionsResult;
 
-            return wrongChoises;
+            statisticLogic.UpdateTestStatistic(testToCompare.Name, testResult);
+
+            return testResult;
         }
 
         /// TODO Use this with all questions method
@@ -148,7 +128,7 @@ namespace Business
             {
                 questionResult.IsOpen = true;
 
-                if (!(questionToCompare.Answers[0].Content == questionWithChoses.Answers[0].Content))
+                if (!questionWithChoses.Answers[0].Content.Equals(questionToCompare.Answers[0].Content, StringComparison.OrdinalIgnoreCase))               
                 {
                     questionResult.IsRight = false;
                     return questionResult;
@@ -174,6 +154,7 @@ namespace Business
                     }
                 }
             }
+
             return questionResult;
         }
     }

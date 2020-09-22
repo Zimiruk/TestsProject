@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using ViewModel.Utility;
 
 namespace ViewModel.Commands
 {
@@ -22,9 +23,9 @@ namespace ViewModel.Commands
         public void Execute(object parameter)
         {
             ///TODO 
-            if (parameter is Parameter)
+            if (parameter is CommandParameter)
             {
-                Parameter param = (Parameter)parameter;
+                CommandParameter param = (CommandParameter)parameter;
 
                 viewModel.SelectedViewModel = new TestRunViewModel(param.Test);
             }

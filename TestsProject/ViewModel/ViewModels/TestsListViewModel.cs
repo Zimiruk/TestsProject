@@ -1,4 +1,5 @@
 ﻿using Business;
+using ViewModel.Utility;
 using Common.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,10 +25,13 @@ namespace ViewModel
                 _testsNames.Add(name);
             }
 
-            Execution = new Parameter();
+            Execution = new CommandParameter();
         }
 
-        public Parameter Execution { get; set; }
+        public CommandParameter Execution { get; set; }
+
+        public ObservableCollection<string> TestsNames { get { return _testsNames; } }
+        private ObservableCollection<string> _testsNames = new ObservableCollection<string>();
 
         private string selectedTestName;
         public string SelectedTestName
@@ -53,20 +57,6 @@ namespace ViewModel
                 SelectedTestStatistic.AttempsCount = testStatistic.AttempsCount;
 
                 OnPropertyChanged("SelectedTestName");
-            }
-        }
-
-        private int questionsCount;
-        public int QuestionsCount
-        {
-            get
-            {
-                return questionsCount;
-            }
-            set
-            {
-                questionsCount = value;
-                OnPropertyChanged("QuestionsCount");
             }
         }
 
@@ -98,11 +88,25 @@ namespace ViewModel
             }
         }
 
+        private int questionsCount;
+        public int QuestionsCount
+        {
+            get
+            {
+                return questionsCount;
+            }
+            set
+            {
+                questionsCount = value;
+                OnPropertyChanged("QuestionsCount");
+            }
+        }
+
         private bool contentVisibility = false;
         public bool ContentVisibility
         {
             get
-            { 
+            {
                 return contentVisibility;
             }
 
@@ -115,9 +119,6 @@ namespace ViewModel
                 }
             }
         }
-
-        public ObservableCollection<string> TestsNames { get { return _testsNames; } }
-        private ObservableCollection<string> _testsNames = new ObservableCollection<string>();
 
         private RelayCommand showTestContent;
         public RelayCommand ShowTestContent

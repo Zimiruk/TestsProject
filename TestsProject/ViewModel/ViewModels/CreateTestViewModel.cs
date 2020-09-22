@@ -11,9 +11,6 @@ using ViewModel.Models;
 
 namespace ViewModel
 {
-    /// <summary>
-    /// TODO Other way to show messages
-    /// </summary>
     public class CreateTestViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private TestsLogic testsLogic = new TestsLogic();
@@ -56,7 +53,72 @@ namespace ViewModel
             }
         }
 
-        /// TODO change this
+        private RelayCommand saveTest;
+        public RelayCommand SaveTest
+        {
+            get
+            {
+                return saveTest ??
+                  (saveTest = new RelayCommand(obj =>
+                  {
+                      Test testForSaving = new Test();
+
+                      testForSaving.Name = test.TestName;
+                      testForSaving.Questions = new List<Question>();
+                      testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;
+                      testForSaving.ShowAnswerAtEnd = test.ShowAnswerAtEnd;
+
+                      foreach (QuestionView question in test.Questions)
+                      {
+                          Question questionForSaving = new Question();
+                          questionForSaving.QuestionContent = question.QuestionContent;
+                          questionForSaving.IsOpen = question.IsOpen;
+                          questionForSaving.Answers = new List<Answer>();
+
+                          foreach (AnswerView answer in question.Answers)
+                          {
+                              questionForSaving.Answers.Add(new Answer { Content = answer.AnswerContent, IsItRight = answer.IsRight });
+                          }
+
+                          testForSaving.Questions.Add(questionForSaving);
+                      }
+
+                      CreationReport creationReport = testsLogic.ValidateCreation(testForSaving);
+
+                      /// TODO 4x if                 
+                      if (creationReport.Result)
+                      {
+                          ///TODO Fix that
+                          ///Use converter
+                          if (testsLogic.CheckIfFileExists(testForSaving.Name, Constants.TestPath, "test"))
+                          {
+                              MessageBoxResult result = MessageBox.Show("Test with such name already exist \n You want to overwrite it with new one?", "Something happend", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                              if (result == MessageBoxResult.Yes)
+                              {
+                                  testsLogic.SaveTest(testForSaving);
+                                  statisticLogic.DeleteStatistic(testForSaving.Name);
+                                  MessageBox.Show("Test saved");
+                              }
+                          }
+
+                          else
+                          {
+                              testsLogic.SaveTest(testForSaving);
+                              MessageBox.Show("Test saved");
+                          }
+                      }
+
+                      else
+                      {
+                          MessageBox.Show(creationReport.Message);
+                          if (creationReport.BadQuestions.Count != 0)
+                              SelectedQuestion = Questions[creationReport.BadQuestions[0]];
+                      }
+                  }));
+            }
+        }
+
         private bool addAnswerButtonVisibility = false;
         public bool AddAnswerButtonVisibility
         {
@@ -120,6 +182,24 @@ namespace ViewModel
             }
         }
 
+        private RelayCommand removeQuestion;
+        public RelayCommand RemoveQuestion
+        {
+            get
+            {
+                return removeQuestion ??
+                  (removeQuestion = new RelayCommand(obj =>
+                  {
+                      Questions.Remove(SelectedQuestion);
+
+                      if (Questions.Count > 0)
+                      {
+                          SelectedQuestion = Questions[0];
+                      }
+                  }));
+            }
+        }
+
         private RelayCommand addAnswer;
         public RelayCommand AddAnswer
         {
@@ -151,92 +231,7 @@ namespace ViewModel
                       SelectedQuestion.Answers.Remove(obj as AnswerView);
                   }));
             }
-        }
-
-        private RelayCommand removeQuestion;
-        public RelayCommand RemoveQuestion
-        {
-            get
-            {
-                return removeQuestion ??
-                  (removeQuestion = new RelayCommand(obj =>
-                  {
-                      Questions.Remove(SelectedQuestion);
-
-                      if (Questions.Count > 0)
-                      {
-                          SelectedQuestion = Questions[0];
-                      }
-                  }));
-            }
-        }
-
-        private RelayCommand saveTest;
-        public RelayCommand SaveTest
-        {
-            get
-            {
-                return saveTest ??
-                  (saveTest = new RelayCommand(obj =>
-                  {
-                      Test testForSaving = new Test();
-
-                      testForSaving.Name = test.TestName;
-                      testForSaving.Questions = new List<Question>();
-                      testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;
-                      testForSaving.ShowAnswerAtEnd = test.ShowAnswerAtEnd;
-
-                      foreach (QuestionView question in test.Questions)
-                      {
-                          Question questionForSaving = new Question();
-                          questionForSaving.QuestionContent = question.QuestionContent;
-                          questionForSaving.IsOpen = question.IsOpen;
-                          questionForSaving.Answers = new List<Answer>();
-
-                          foreach (AnswerView answer in question.Answers)
-                          {
-                              questionForSaving.Answers.Add(new Answer { Content = answer.AnswerContent, IsItRight = answer.IsRight });
-                          }
-
-                          testForSaving.Questions.Add(questionForSaving);
-                      }
-
-                      CreationReport creationReport = testsLogic.ValidateCreation(testForSaving);
-
-                      /// TODO 4x if
-                      /// TODO MessageBox
-                      if (creationReport.Result)
-                      {
-                          ///TODO Fix that
-                          ///Use converter
-                          if (testsLogic.CheckIfFileExists(testForSaving.Name, Constants.TestPath, "test"))
-                          {
-                              MessageBoxResult result = MessageBox.Show("Test with such name already exist \n You want to overwrite it with new one?", "Something happend", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                              if (result == MessageBoxResult.Yes)
-                              {
-                                  testsLogic.SaveTest(testForSaving);
-                                  statisticLogic.DeleteStatistic(testForSaving.Name);
-                                  MessageBox.Show("Test saved");
-                              }
-                          }
-
-                          else
-                          {
-                              testsLogic.SaveTest(testForSaving);
-                              MessageBox.Show("Test saved");
-                          }
-                      }
-
-                      else
-                      {
-                          MessageBox.Show(creationReport.Message);
-                          if (creationReport.BadQuestions.Count != 0)
-                              SelectedQuestion = Questions[creationReport.BadQuestions[0]];
-                      }
-                  }));
-            }
-        }
+        }       
 
         public new event PropertyChangedEventHandler PropertyChanged;
         public new void OnPropertyChanged([CallerMemberName] string prop = "")

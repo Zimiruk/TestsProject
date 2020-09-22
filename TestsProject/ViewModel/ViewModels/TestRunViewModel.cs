@@ -32,10 +32,14 @@ namespace ViewModel
 
         public Test TestToRun { get; set; }
 
-        private Dictionary<int, List<int>> wrongChoises;
+        private TestView test;
+        public TestView Test
+        {
+            get { return test; }
+        }
 
-        private Result testResult;
-        public Result TestResult
+        private TestResult testResult;
+        public TestResult TestResult
         {
             get
             {
@@ -48,40 +52,15 @@ namespace ViewModel
             }
         }
 
-        private bool testDone;
-        public bool TestDone
+        public ObservableCollection<QuestionView> Questions
         {
             get
             {
-                return testDone;
-            }
-            set
-            {
-                testDone = value;
-                OnPropertyChanged("TestDone");
+                return test.Questions;
             }
         }
 
-        private bool resultVisibility;
-        public bool ResultVisibility
-        {
-            get
-            {
-                return resultVisibility;
-            }
-            set
-            {
-                resultVisibility = value;
-                OnPropertyChanged("ResultVisibility");
-            }
-        }
-
-        private TestView test;
-        public TestView Test
-        {
-            get { return test; }
-        }
-
+       
         private QuestionView selectedQuestion;
         public QuestionView SelectedQuestion
         {
@@ -116,24 +95,49 @@ namespace ViewModel
             }
         }
 
+        private string selectedStyle;
         public string SelectedStyle
         {
-            get { return this.selectedStyle; }
+            get { return selectedStyle; }
             set
             {
                 this.selectedStyle = value;
                 OnPropertyChanged("SelectedStyle");
             }
         }
-        private string selectedStyle;
+     
+        #region [ Style Properties ]
 
-        public ObservableCollection<QuestionView> Questions
+        private bool testDone;
+        public bool TestDone
         {
             get
             {
-                return test.Questions;
+                return testDone;
+            }
+            set
+            {
+                testDone = value;
+                OnPropertyChanged("TestDone");
             }
         }
+
+        private bool resultVisibility;
+        public bool ResultVisibility
+        {
+            get
+            {
+                return resultVisibility;
+            }
+            set
+            {
+                resultVisibility = value;
+                OnPropertyChanged("ResultVisibility");
+            }
+        }
+
+        #endregion
+
 
         private void FillTestViewWithContent()
         {
@@ -142,9 +146,6 @@ namespace ViewModel
             test.ShowAnswerAtEnd = TestToRun.ShowAnswerAtEnd;
 
             test.Questions = new ObservableCollection<QuestionView>();
-
-            ///TODO Let it be here for now
-            //foreach (Question question in TestToRun.Questions)
 
             for (int i = 0; i < TestToRun.Questions.Count; i++)
             {
@@ -162,7 +163,7 @@ namespace ViewModel
                 {
                     if (questionView.IsOpen)
                     {
-                        questionView.Answers.Add(new AnswerView { AnswerContent = "", IsRight = false });
+                        questionView.Answers.Add(new AnswerView { AnswerContent = "", IsRight = true });
                     }
 
                     else
@@ -178,42 +179,15 @@ namespace ViewModel
 
         private void UpdateFormColors()
         {
-            ///TODO 4x if
-            for (int i = 0; i < Questions.Count; i++)
+            foreach(QuestionResult questionResult in TestResult.QuestionsResult)
             {
-
-                if (!wrongChoises.ContainsKey(i))
-                {
-                    Questions[i].Color = MyEnum.Status.Right;
-                }
-
-                else
-                {
-                    Questions[i].Color = MyEnum.Status.Wrong;
-                }
-
-                for (int j = 0; j < Questions[i].Answers.Count; j++)
-                {
-                    if (TestToRun.Questions[i].Answers[j].IsItRight)
-                    {
-                        Questions[i].Answers[j].Color = MyEnum.Status.Right;
-                    }
-
-                    if (wrongChoises.ContainsKey(i))
-                    {
-                        if (wrongChoises[i].Exists(x => x == j))
-                        {
-                            Questions[i].Answers[j].Color = MyEnum.Status.Wrong;
-                        }
-                    }
-                }
-
-                SelectedQuestion = null;
-                ResultVisibility = true;
+                SetColorsToQuestion(questionResult);
             }
+
+            SelectedQuestion = null;
+            ResultVisibility = true;
         }
 
-        /// TODO Use it for all questions
         private void SetColorsToQuestion(QuestionResult questionResult)
         {
             int id = questionResult.QuestionId;
@@ -239,8 +213,8 @@ namespace ViewModel
             }
 
             for (int j = 0; j < Questions[id].Answers.Count; j++)
-            {
-                if (!questionResult.NoChoises)
+            {          
+                if (!questionResult.NoChoises && !questionResult.IsRight)
                 {
                     if (questionResult.WrongAnswerChoises.Exists(x => x == j))
                     {
@@ -298,7 +272,6 @@ namespace ViewModel
 
                       SelectedQuestion = null;
                       SelectedQuestion = Questions[id];
-
                       
                   }));
             }
@@ -330,7 +303,6 @@ namespace ViewModel
         {
             timer.Stop();
 
-            Result result;
             Test finishedTest = new Test();
 
             finishedTest.Name = test.TestName;
@@ -353,12 +325,10 @@ namespace ViewModel
                 finishedTest.Questions.Add(questionForSaving);
             }
 
-            wrongChoises = testsLogic.FinishTest(finishedTest, TestToRun, out result);
-            TestResult = result;
+            TestResult = testsLogic.FinishTest(finishedTest, TestToRun);            
             TestDone = true;
             UpdateFormColors();
         }
-
 
 
         private RelayCommand showResult;

@@ -1,8 +1,8 @@
 ﻿using Common.Models;
 
-namespace ViewModel
+namespace ViewModel.Utility
 {
-    public class Parameter
+    public class CommandParameter
     {
         public Test Test { get; set; }
     }

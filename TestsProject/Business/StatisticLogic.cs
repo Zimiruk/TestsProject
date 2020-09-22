@@ -26,7 +26,7 @@ namespace Business
         }
 
         /// TODO Right answers, success count etc
-        public void UpdateTestStatistic(string testName)
+        public void UpdateTestStatistic(string testName, TestResult testResult)
         {
             if (statisticFiles.CheckIfFileExists(testName, "TestsStatistic", "dat"))
             {

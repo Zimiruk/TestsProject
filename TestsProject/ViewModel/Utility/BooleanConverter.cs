@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace ViewModel
+namespace ViewModel.Utility
 {
     public class BooleanConverter<T> : IValueConverter
     {
@@ -24,6 +24,7 @@ namespace ViewModel
         public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value is T && EqualityComparer<T>.Default.Equals((T)value, True);
+
         }
     }
 }

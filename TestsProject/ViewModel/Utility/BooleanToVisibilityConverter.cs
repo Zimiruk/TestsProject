@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ViewModel
+namespace ViewModel.Utility
 {
     public sealed class BooleanToVisibilityConverter : BooleanConverter<Visibility>
     {
