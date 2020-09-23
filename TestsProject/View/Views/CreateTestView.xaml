@@ -59,197 +59,110 @@
         BorderThickness="4 0 4 0" Grid.RowSpan="2">
         </Border>
 
-        <Grid x:Name="TestResult" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
+        <Grid x:Name="TestContent" Grid.Column="1" Visibility="Visible" Grid.RowSpan="2" Background ="AliceBlue">
+            <Canvas>
+                <Label Content="Test name:" Canvas.Left="35" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <TextBox Canvas.Left="110" Canvas.Top="30" Text="{Binding Test.TestName}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"></ColumnDefinition>
-                    <ColumnDefinition Width="83*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Results"></Label>
-            </Grid>
+                <Label Content="Test theme:" Canvas.Left="240" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <TextBox Canvas.Left="320" Canvas.Top="30" Text="{Binding Test.ThemeName}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20*"></ColumnDefinition>
-                    <ColumnDefinition Width="83*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Right answers: "></Label>
-                <Label x:Name="TestTheme" Grid.Column="1" Content="0 / 0"></Label>
-            </Grid>
-        </Grid>
+                <Label Content="Subtheme:" Canvas.Left="450" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <TextBox Canvas.Left="530" Canvas.Top="30" Text="{Binding Subtheme}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
-        <Grid x:Name="TestContent" Grid.Column="1" Visibility="Visible" Grid.RowSpan="2">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition />
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                <Button Content="Add that subtheme" Canvas.Left="670" Canvas.Top="30" Height="30" Width="120"/>
 
-                <Grid Grid.Row="0" Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                <Expander Canvas.Left="810" Canvas.Top="30" Height="30" Width="120" Background="LightGreen"></Expander>
 
-                    <Label Grid.Column="0" Margin="10,0,0,0" Content="Test name: " ></Label>
-                    <Label Grid.Column="1" Margin="10,0,0,0" Content="Test theme: " ></Label>
-                    <TextBox Text="{Binding Test.TestName}" Grid.Column="1" Margin="88,3,140,-3"/>
-                    <TextBox Text="{Binding Test.TestName}" Margin="88,0,134,0"/>
-                </Grid>
+                <Label Content="Timer minutes:"  Canvas.Left="35" Canvas.Top="80" Height="38" Width="115"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <TextBox x:Name="Minutes" Canvas.Left="140" Canvas.Top="85" Text="{Binding Test.TimerMinute}" TextWrapping="Wrap" Width="30" Height="30"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
-                <Grid Grid.Row="1" Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"></ColumnDefinition>
-                        <ColumnDefinition Width="40"></ColumnDefinition>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="40"></ColumnDefinition>
-                        <ColumnDefinition Width="321"></ColumnDefinition>
-                        <ColumnDefinition Width="103*"></ColumnDefinition>
-                        <ColumnDefinition Width="217*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                <Label Content="Timer seconds:"  Canvas.Left="180" Canvas.Top="80" Height="38" Width="115"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <TextBox x:Name="Seconds" Canvas.Left="290" Canvas.Top="85" Text="{Binding Test.TimerSecond}" TextWrapping="Wrap" Width="30" Height="30"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
-                    <Label Grid.Column="0" Margin="10,0,0,0" Content="Timer minutes: " />
-                    <TextBox x:Name="Minutes" Grid.Column="1" Text="{Binding Test.TimerMinute}">
+                <Label Content="When right answer should be shown"  Canvas.Left="340" Canvas.Top="80" Height="38" Width="240"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <RadioButton GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd}" Content="at the end" Canvas.Left="580" Canvas.Top="80" FontSize="14"/>
+                <RadioButton GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd, Converter={StaticResource BoolInverter}}" Content="immediately" Canvas.Left="580" Canvas.Top="98" FontSize="14"/>
 
-                    </TextBox>
-                    <Label Grid.Column="2" Margin="10,0,0,0" Content="Timer seconds: " ></Label>
-                    <TextBox x:Name="Seconds" Grid.Column="3" Text="{Binding Test.TimerSecond}"/>
+                <Label Content="Right answers to pass:"  Canvas.Left="700" Canvas.Top="80" Height="38" Width="150"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <TextBox x:Name="RightAmount" Canvas.Left="870" Canvas.Top="85" TextWrapping="Wrap" Width="30" Height="30"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                    <TextBox.Text>
+                        <Binding Path="Test.ToPassAmount">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
-                    <Grid Grid.Column="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Margin="10,0,0,0" Content="Show the correct answer:" ></Label>
-                        <Grid Grid.ColumnSpan="2" Margin="160,0,63,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <RadioButton Grid.Row="0" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd}" Content="at the end" HorizontalAlignment="Left" Width="90"/>
-                            <RadioButton Grid.Row="1" GroupName="TestEnd" IsChecked="{Binding Test.ShowAnswerAtEnd, Converter={StaticResource BoolInverter}}" Content="immediately" HorizontalAlignment="Left" Width="90"/>
-                        </Grid>
+                <Button Canvas.Left="970" Canvas.Top="35" Width="75" Height="80" Command="{Binding SaveTest}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=Minutes}" Value="False"/>
+                                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=Seconds}" Value="False"/>
+                                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=RightAmount}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <TextBlock TextWrapping="Wrap" FontSize="16">  Save <LineBreak/> that <LineBreak/> test</TextBlock>
+                </Button>
 
-                        
-             
-                    </Grid>
+                <Border Canvas.Left="35" Canvas.Top="160" BorderThickness="1" BorderBrush="Black">
+                    <TextBlock x:Name="QuestionContent" Height="150" Text="{Binding SelectedQuestion.QuestionContent}" TextWrapping="Wrap" Width="1010" FontSize="26"/>
+                </Border>
 
-                    <Label Grid.Column="5" Margin="10,0,0,0" Content="Right answers to pass: " ></Label>
-                    <TextBox x:Name="RightAmount" Grid.Column="6" Width="40" HorizontalAlignment="Left">
-                        <TextBox.Text>
-                            <Binding Path="Test.ToPassAmount">
-                                <Binding.ValidationRules>
-                                    <DataErrorValidationRule />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                <Button Content="Last question" Canvas.Left="35" Canvas.Top="340" Height="30" Width="120"/>
+                <Button Content="Delete current question" Canvas.Left="470" Canvas.Top="340" Height="30" Width="140" Command="{Binding RemoveQuestion}"/>
+                <Button Content="Add that subtheme" Canvas.Left="925" Canvas.Top="340" Height="30" Width="120"/>
 
-                </Grid>
+                <Label Content="Answers"  Canvas.Left="35" Canvas.Top="390" Height="38" Width="80"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <Button Content="Add answer" Canvas.Left="135" Canvas.Top="390" Height="30" Width="120" Command="{Binding AddAnswer}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AddAnswerButtonVisibility}"  Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AddAnswerButtonVisibility}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}"  Value="False">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
-                <Grid Grid.Row="2" Margin="0,0,0,4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="119*"/>
-                        <ColumnDefinition Width="921*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="QuestionContent" Margin="28,104,135,0" Text="{Binding SelectedQuestion.QuestionContent}" Grid.ColumnSpan="2"/>
-                    <Button Content="Save test" HorizontalAlignment="Left" Margin="833,-14,0,0" VerticalAlignment="Top" Height="37" Width="88" Command="{Binding SaveTest}" Grid.Column="1">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="IsEnabled" Value="False"/>
-                                <Style.Triggers>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Path=(Validation.HasError), ElementName=Minutes}" Value="False"/>
-                                            <Condition Binding="{Binding Path=(Validation.HasError), ElementName=Seconds}" Value="False"/>
-                                            <Condition Binding="{Binding Path=(Validation.HasError), ElementName=RightAmount}" Value="False"/>
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                    </MultiDataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </Grid>
+                <Label Content="Is it right answer"  Canvas.Left="35" Canvas.Top="440" Height="38" Width="120"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}"  Value="False">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
 
-                <Grid Grid.Row="3">
-                    <Button Content="Remove current question" HorizontalAlignment="Left" Margin="50 10 0 10 " Width="200" Command="{Binding RemoveQuestion}"/>
-                </Grid>
+                <Label Content="Answer content"  Canvas.Left="185" Canvas.Top="440" Height="38" Width="120"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="93*"/>
-                        <ColumnDefinition Width="122*"/>
-                        <ColumnDefinition Width="134*"/>
-                        <ColumnDefinition Width="316*"/>
-                        <ColumnDefinition Width="390*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Name="AnswersLabel" FontSize="14" Margin="10,10,0,0" Grid.ColumnSpan="5">
-                        Answers
-                    </Label>
-                    <Button Grid.Column="1" Margin="10,15,0,0"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Add" Command="{Binding AddAnswer}" Width="90" Height="20">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}" Value="True">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding AddAnswerButtonVisibility}"  Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding AddAnswerButtonVisibility}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}"  Value="False">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </Grid>
-
-                <Grid Grid.Row="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="97*"></ColumnDefinition>
-                        <ColumnDefinition Width="58*"/>
-                        <ColumnDefinition Width="925*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Label FontSize="14" Margin="10,10,0,0" Grid.Column="0" Grid.ColumnSpan="2">
-                        Is it right answer
-                        <Label.Style>
-                            <Style TargetType="Label">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}" Value="True">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding SelectedQuestion.IsOpen}"  Value="False">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Label.Style>
-                    </Label>
-                    <Label FontSize="14" Margin="30,10,0,0" Grid.Column="2">
-                        Answer content
-                    </Label>
-                </Grid>
-
-                <Grid Grid.Row="6">
-                    <StackPanel  Margin="0,0,6,0" >
+                <Border Canvas.Left="35" Canvas.Top="490" Width="1010" Height="128" BorderThickness="1" BorderBrush="Black">
+                    <StackPanel>
                         <ItemsControl ItemsSource="{Binding SelectedQuestion.Answers}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -270,9 +183,8 @@
                                                 </Style>
                                             </CheckBox.Style>
                                         </CheckBox>
-                                        <TextBox Text="{Binding Path = AnswerContent}" Width="500" Margin="120,0,0,0"/>
-                                        <Button Content="Remove that answer" Command="{Binding DataContext.RemoveAnswer, RelativeSource={RelativeSource Mode=FindAncestor,
-                                                               AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}">
+                                        <TextBox Text="{Binding Path = AnswerContent}" Width="700" Margin="120,0,0,0"/>
+                                        <Button Content="Remove that answer" Command="{Binding DataContext.RemoveAnswer, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}">
                                             <Button.Style>
                                                 <Style TargetType="Button">
                                                     <Style.Triggers>
@@ -280,8 +192,7 @@
                                                                AncestorType={x:Type ItemsControl}}}" Value="True">
                                                             <Setter Property="Visibility" Value="Collapsed"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding DataContext.SelectedQuestion.IsOpen, RelativeSource={RelativeSource Mode=FindAncestor,
-                                                               AncestorType={x:Type ItemsControl}}}"  Value="False">
+                                                        <DataTrigger Binding="{Binding DataContext.SelectedQuestion.IsOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"  Value="False">
                                                             <Setter Property="Visibility" Value="Visible"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -293,8 +204,8 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                </Grid>
-            </Grid>
+                </Border>
+            </Canvas>
         </Grid>
     </Grid>
 </UserControl>

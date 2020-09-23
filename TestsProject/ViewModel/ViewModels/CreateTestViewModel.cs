@@ -209,9 +209,9 @@ namespace ViewModel
                 return addAnswer ??
                   (addAnswer = new RelayCommand(obj =>
                   {
-                      if (selectedQuestion.Answers.Count == 5)
+                      if (selectedQuestion.Answers.Count == 6)
                       {
-                          MessageBox.Show("5 answers is enough");
+                          MessageBox.Show("6 answers is enough");
                       }
                       else
                       {

@@ -55,7 +55,7 @@ namespace ViewModel
 
                 testStatistic = statisticLogic.GetTestStatistic(test.Name);
                 SelectedTestStatistic.AttempsCount = testStatistic.AttempsCount;
-                SelectedTestStatistic.
+                SelectedTestStatistic.SuccessCount = testStatistic.SuccessCount;
 
                 OnPropertyChanged("SelectedTestName");
             }

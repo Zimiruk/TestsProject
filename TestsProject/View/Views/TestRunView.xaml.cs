@@ -9,18 +9,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using ViewModel;
 
 namespace View.Views
 {
     /// <summary>
-    /// Логика взаимодействия для TestResult.xaml
+    /// Логика взаимодействия для TestRun.xaml
     /// </summary>
-    public partial class TestResult
+    public partial class TestRunView
     {
-        public TestResult()
+        public TestRunView()
         {
-            InitializeComponent();           
+            InitializeComponent();
         }
     }
 }

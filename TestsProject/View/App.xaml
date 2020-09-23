@@ -14,10 +14,10 @@
             <views:TestsListView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:TestRunViewModel}">
-            <views:TestRun/>
+            <views:TestRunView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:TestResultViewModel}">
-            <views:TestResult/>
+            <views:TestResultView/>
         </DataTemplate>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <utility:BoolInverterConverter x:Key="BoolInverter"/>
