@@ -48,6 +48,14 @@ namespace ViewModel
             }
         }
 
+        public ObservableCollection<string> SubThemes
+        {
+            get
+            {
+                return test.SubThemes;
+            }
+        }
+
 
         private QuestionView selectedQuestion;
         public QuestionView SelectedQuestion
@@ -144,6 +152,16 @@ namespace ViewModel
             test = new TestView();
             test.TestName = TestToRun.Name;
             test.ShowAnswerAtEnd = TestToRun.ShowAnswerAtEnd;
+
+            test.SubThemes = new ObservableCollection<string>();
+
+            if(TestToRun.SubThemes != null)
+            {
+                foreach (string subTheme in TestToRun.SubThemes)
+                {
+                    test.SubThemes.Add(subTheme);
+                }
+            }
 
             test.Questions = new ObservableCollection<QuestionView>();
 

@@ -59,7 +59,7 @@
         BorderThickness="4 0 4 0" Grid.RowSpan="2">
         </Border>
 
-        <Grid x:Name="TestContent" Grid.Column="1" Visibility="Visible" Grid.RowSpan="2" Background ="AliceBlue">
+        <Grid x:Name="TestContent" Grid.Column="1" Visibility="Visible" Grid.RowSpan="2" Background ="AliceBlue" Width="1080">
             <Canvas>
                 <Label Content="Test name:" Canvas.Left="35" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
                 <TextBox Canvas.Left="110" Canvas.Top="30" Text="{Binding Test.TestName}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
@@ -67,13 +67,26 @@
                 <Label Content="Test theme:" Canvas.Left="240" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
                 <TextBox Canvas.Left="320" Canvas.Top="30" Text="{Binding Test.ThemeName}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
+                <!-- TODO MayB make dialog window here -->
                 <Label Content="Subtheme:" Canvas.Left="450" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-                <TextBox Canvas.Left="530" Canvas.Top="30" Text="{Binding Subtheme}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-
-                <Button Content="Add that subtheme" Canvas.Left="670" Canvas.Top="30" Height="30" Width="120"/>
-
-                <Expander Canvas.Left="810" Canvas.Top="30" Height="30" Width="120" Background="LightGreen"></Expander>
-
+                <TextBox Canvas.Left="530" Canvas.Top="30" Text="{Binding SubTheme}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>         
+                <Button Content="Add that subtheme" Canvas.Left="670" Canvas.Top="30" Height="30" Width="120" Command="{Binding AddSubtheme}"/>
+                <Expander Header="Subthemes"  Canvas.Left="810" Canvas.Top="30" Width="120" Background="LightGreen" Panel.ZIndex="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="100" >
+                        <StackPanel Name="StackScroll" Margin="0,0,0,2" Panel.ZIndex="2" Background="Azure" >
+                            <ItemsControl ItemsSource="{Binding SubThemes}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel>
+                                            <TextBlock Text="{Binding}"/>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Expander>                
+       
                 <Label Content="Timer minutes:"  Canvas.Left="35" Canvas.Top="80" Height="38" Width="115"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
                 <TextBox x:Name="Minutes" Canvas.Left="140" Canvas.Top="85" Text="{Binding Test.TimerMinute}" TextWrapping="Wrap" Width="30" Height="30"  FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
@@ -115,7 +128,7 @@
                 </Button>
 
                 <Border Canvas.Left="35" Canvas.Top="160" BorderThickness="1" BorderBrush="Black">
-                    <TextBlock x:Name="QuestionContent" Height="150" Text="{Binding SelectedQuestion.QuestionContent}" TextWrapping="Wrap" Width="1010" FontSize="26"/>
+                    <TextBox x:Name="QuestionContent" Padding="10" Height="150" Text="{Binding SelectedQuestion.QuestionContent}" TextWrapping="Wrap" Width="1010" FontSize="18"/>
                 </Border>
 
                 <Button Content="Last question" Canvas.Left="35" Canvas.Top="340" Height="30" Width="120"/>

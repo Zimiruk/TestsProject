@@ -9,7 +9,8 @@ namespace ViewModel.Models
     {
         public TestView()
         {
-            this.Questions = new ObservableCollection<QuestionView>();
+            Questions = new ObservableCollection<QuestionView>();
+            SubThemes = new ObservableCollection<string>();
         }
 
         private string testName;
@@ -104,6 +105,7 @@ namespace ViewModel.Models
         }
 
         public ObservableCollection<QuestionView> Questions { get; set; }
+        public ObservableCollection<string> SubThemes { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

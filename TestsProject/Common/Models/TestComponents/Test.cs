@@ -10,7 +10,7 @@ namespace Common.Models
 
         public string Theme { get; set; }
 
-        List<string> SubThemes { get; set; }
+        public List<string> SubThemes { get; set; }
 
         public List<Question> Questions { get; set; }
 

@@ -22,6 +22,7 @@ namespace ViewModel
             test.TestName = "Test";
             test.ShowAnswerAtEnd = true;
 
+            test.SubThemes = new ObservableCollection<string>();
             test.Questions = new ObservableCollection<QuestionView>();
         }
 
@@ -29,6 +30,28 @@ namespace ViewModel
         public TestView Test
         {
             get { return test; }
+        }
+
+        private string subTheme;
+        public string SubTheme
+        {
+            get
+            {
+                return subTheme;
+            }
+            set
+            {
+                subTheme = value;
+                OnPropertyChanged("SubTheme");
+            }
+        }
+
+        public ObservableCollection<string> SubThemes
+        {
+            get
+            {
+                return test.SubThemes;
+            }
         }
 
         public ObservableCollection<QuestionView> Questions
@@ -53,6 +76,7 @@ namespace ViewModel
             }
         }
 
+        /// TODO Converter
         private RelayCommand saveTest;
         public RelayCommand SaveTest
         {
@@ -64,10 +88,18 @@ namespace ViewModel
                       Test testForSaving = new Test();
 
                       testForSaving.Name = test.TestName;
+                      testForSaving.Theme = test.TestTheme;
                       testForSaving.Questions = new List<Question>();
                       testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;
                       testForSaving.ShowAnswerAtEnd = test.ShowAnswerAtEnd;
                       testForSaving.ToPassAmount = test.ToPassAmount;
+
+                      testForSaving.SubThemes = new List<string>();
+
+                      foreach (string subTheme in test.SubThemes)
+                      {
+                          testForSaving.SubThemes.Add(subTheme);
+                      }
 
                       foreach (QuestionView question in test.Questions)
                       {
@@ -232,7 +264,36 @@ namespace ViewModel
                       SelectedQuestion.Answers.Remove(obj as AnswerView);
                   }));
             }
-        }       
+        }
+
+        private RelayCommand addSubtheme;
+        public RelayCommand AddSubtheme
+        {
+            get
+            {
+                return addSubtheme ??
+                  (addSubtheme = new RelayCommand(obj =>
+                  {
+                      bool found = false;
+
+                      foreach (string item in SubThemes)
+                      {
+                          if (item == SubTheme)
+                          {
+                              found = true;
+                              break;
+                          }                              
+                      }
+
+                      if(!found)
+                      {
+                          SubThemes.Add(SubTheme);
+                          SubTheme = "";
+                      }
+
+                  }));
+            }
+        }
 
         public new event PropertyChangedEventHandler PropertyChanged;
         public new void OnPropertyChanged([CallerMemberName] string prop = "")
