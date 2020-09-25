@@ -2,9 +2,11 @@
 using Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Business
 {
+    /// TODO
     public class TestsLogic
     {
         private TestFilesOperations operations = new TestFilesOperations();
@@ -18,6 +20,11 @@ namespace Business
         public List<string> ShowTestsNames()
         {
             return operations.GetTestsNames();
+        }
+
+        public ObservableCollection<Node> GetListForTree()
+        {
+            return operations.GetListForTree();
         }
 
         public Test GetTest(string testName)
@@ -66,7 +73,6 @@ namespace Business
             return executionReport;
         }
 
-        /// TODO Not sure
         private TestResult CreateResult(int rightAmount, List<QuestionResult> questionsResult)
         {
             TestResult testResult = new TestResult();            
@@ -94,7 +100,6 @@ namespace Business
             return testResult;
         }
 
-
         public TestResult FinishTest(Test finishedTest, Test testToCompare)
         {    
             List<QuestionResult> questionsResult = new List<QuestionResult>();
@@ -108,12 +113,11 @@ namespace Business
             TestResult testResult = CreateResult(testToCompare.ToPassAmount, questionsResult);
             testResult.QuestionsResult = questionsResult;
 
-            statisticLogic.UpdateTestStatistic(testToCompare.Name, testResult);
+            statisticLogic.UpdateTestStatistic(testToCompare.Name, testResult, testToCompare.Questions.Count);
 
             return testResult;
         }
-
-        /// TODO Use this with all questions method
+         
         public QuestionResult CheckCurrentQuestion(Question questionWithChoses, Question questionToCompare, int id)
         {
             QuestionResult questionResult = new QuestionResult {QuestionId = id, IsRight = true, IsOpen = false, NoChoises = false };
@@ -154,7 +158,6 @@ namespace Business
                     }
                 }
             }
-
             return questionResult;
         }
     }

@@ -10,18 +10,31 @@
         <DataTemplate DataType="{x:Type viewModels:CreateTestViewModel}">
             <views:CreateTestView/>
         </DataTemplate>
+        
         <DataTemplate DataType="{x:Type viewModels:TestsListViewModel}">
             <views:TestsListView/>
         </DataTemplate>
+        
         <DataTemplate DataType="{x:Type viewModels:TestRunViewModel}">
             <views:TestRunView/>
         </DataTemplate>
+        
         <DataTemplate DataType="{x:Type viewModels:TestResultViewModel}">
             <views:TestResultView/>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:SelectedTestViewModel}">
+            <views:SelectedTestView/>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:ThemeInformationViewModel}">
+            <views:ThemeInformationView/>
+        </DataTemplate>
+        
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <utility:BoolInverterConverter x:Key="BoolInverter"/>
         <utility:BooleanToVisibilityConverter
+            
         x:Key="BooleanToVisibilityConverter" 
         True="Collapsed" 
         False="Visible" />

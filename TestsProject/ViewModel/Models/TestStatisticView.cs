@@ -33,6 +33,34 @@ namespace ViewModel.Models
             }
         }
 
+        private double successRate;
+        public double SuccessRate
+        {
+            get
+            {
+                return successRate;
+            }
+            set
+            {
+                successRate = value;
+                OnPropertyChanged("SuccessRate");
+            }
+        }
+
+        private double rightAnswersRate;
+        public double RightAnswersRate
+        {
+            get
+            {
+                return rightAnswersRate;
+            }
+            set
+            {
+                rightAnswersRate = value;
+                OnPropertyChanged("RightAnswersRate");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

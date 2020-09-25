@@ -7,8 +7,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Threading;
 using ViewModel.Commands;
-using ViewModel.Utility;
 using ViewModel.Models;
+using ViewModel.Utility;
 
 namespace ViewModel
 {
@@ -151,6 +151,7 @@ namespace ViewModel
         {
             test = new TestView();
             test.TestName = TestToRun.Name;
+            test.TestTheme = TestToRun.Theme;
             test.ShowAnswerAtEnd = TestToRun.ShowAnswerAtEnd;
 
             test.SubThemes = new ObservableCollection<string>();

@@ -1,4 +1,6 @@
-﻿using Common.Models;
+﻿using Common;
+using Common.Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -28,9 +30,9 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fStream = File.Open($"TestsStatistic\\{testName}.dat", FileMode.Open))
+            using (FileStream fileStream = File.Open($"TestsStatistic\\{testName}.dat", FileMode.Open))
             {
-                TestStatistic testStatistic = (TestStatistic)formatter.Deserialize(fStream);
+                TestStatistic testStatistic = (TestStatistic)formatter.Deserialize(fileStream);
                 return testStatistic;
             }
         }
@@ -39,9 +41,9 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fStream = File.Open($"TestsStatistic\\{testStatistic.TestName}.dat", FileMode.Create))
+            using (FileStream fileStream = File.Open($"TestsStatistic\\{testStatistic.TestName}.dat", FileMode.Create))
             {
-                formatter.Serialize(fStream, testStatistic);
+                formatter.Serialize(fileStream, testStatistic);
             }
         }
 
@@ -49,18 +51,38 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fStream = File.Open($"TestsStatistic\\{testStatistic.TestName}.dat", FileMode.Open))
+            using (FileStream fileStream = File.Open($"TestsStatistic\\{testStatistic.TestName}.dat", FileMode.Open))
             {
-                formatter.Serialize(fStream, testStatistic);
+                formatter.Serialize(fileStream, testStatistic);
             }
         }
 
-        public void DeleteStatistic (string testName)
+        public void DeleteStatistic(string testName)
         {
             if (File.Exists($"TestsStatistic\\{testName}.dat"))
             {
                 File.Delete($"TestsStatistic\\{testName}.dat");
             }
+        }
+
+        /// TODO Check if not Statistic
+        public List<TestStatistic> GetAllStatistic()
+        {
+            List<TestStatistic> statistics = new List<TestStatistic>();
+
+            string path = $"{Constants.StatisticPath}";
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            foreach (string file in Directory.EnumerateFiles(path, "*.dat"))
+            {
+                using (FileStream fileStream = File.Open(file, FileMode.Open))
+                {
+                    TestStatistic testStatistic = (TestStatistic)formatter.Deserialize(fileStream);
+                    statistics.Add(testStatistic);
+                }
+            }
+
+            return statistics;
         }
     }
 }

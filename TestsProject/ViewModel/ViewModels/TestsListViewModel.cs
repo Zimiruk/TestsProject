@@ -1,10 +1,9 @@
 ﻿using Business;
-using ViewModel.Utility;
+using Common;
 using Common.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ViewModel.Commands;
-using ViewModel.Models;
 
 namespace ViewModel
 {
@@ -14,24 +13,26 @@ namespace ViewModel
         private StatisticLogic statisticLogic = new StatisticLogic();
 
         private Test test;
-        private TestStatistic testStatistic;
 
         public TestsListViewModel()
         {
-            List<string> testsNames = testsLogic.ShowTestsNames();
+            Node.SendNode += GetNode;
+
+            List<string> testsNames = testsLogic.ShowTestsNames();  
+            nodes = testsLogic.GetListForTree();
 
             foreach (string name in testsNames)
             {
                 _testsNames.Add(name);
             }
-
-            Execution = new CommandParameter();
         }
 
-        public CommandParameter Execution { get; set; }
-
-        public ObservableCollection<string> TestsNames { get { return _testsNames; } }
         private ObservableCollection<string> _testsNames = new ObservableCollection<string>();
+        public ObservableCollection<string> TestsNames { get { return _testsNames; } }
+
+        private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
+        public ObservableCollection<Node> Nodes { get { return nodes; } }
+
 
         private string selectedTestName;
         public string SelectedTestName
@@ -43,95 +44,51 @@ namespace ViewModel
             set
             {
                 selectedTestName = value;
-                ContentVisibility = true;
-
-                test = testsLogic.GetTest(selectedTestName);
-                Execution.Test = test;
-
-                SelectedTest.TestName = test.Name;
-                SelectedTest.TestTheme = test.Theme;
-                
-                QuestionsCount = test.Questions.Count;
-
-                testStatistic = statisticLogic.GetTestStatistic(test.Name);
-                SelectedTestStatistic.AttempsCount = testStatistic.AttempsCount;
-                SelectedTestStatistic.SuccessCount = testStatistic.SuccessCount;
-
+                ShowSelectedTest(selectedTestName);    
                 OnPropertyChanged("SelectedTestName");
             }
         }
 
-        private TestView selectedTest = new TestView();
-        public TestView SelectedTest
+        /// TODO Delete?
+        private BaseViewModel testInformation;
+
+        public BaseViewModel TestInformation
         {
-            get
-            {
-                return selectedTest;
-            }
+            get { return testInformation; }
             set
             {
-                selectedTest = value;
-                OnPropertyChanged("SelectedTest");
+                testInformation = value;
+                OnPropertyChanged(nameof(TestInformation));
             }
         }
 
-        private TestStatisticView selectedTestStatistic = new TestStatisticView();
-        public TestStatisticView SelectedTestStatistic
+        ///  TODO Send names to class
+        public void GetNode(Node node)
         {
-            get
+            StatisticByTheme statisticByTheme;
+
+            switch (node.NodeType)
             {
-                return selectedTestStatistic;
-            }
-            set
-            {
-                selectedTestStatistic = value;
-                OnPropertyChanged("SelectedTestStatistic");
+                case MyEnum.Nodes.Test:
+                    ShowSelectedTest(node.Name);
+                    break;
+
+                case MyEnum.Nodes.Theme:
+                    statisticByTheme = statisticLogic.GetTestStatisticByTheme(node.Name);
+                    TestInformation = new ThemeInformationViewModel(statisticByTheme);
+                    break;
+
+                case MyEnum.Nodes.SubTheme:
+                    statisticByTheme = statisticLogic.GetTestStatisticByTheme(node.DaddyName, node.Name);
+                    TestInformation = new ThemeInformationViewModel(statisticByTheme);
+                    break;
             }
         }
 
-        private int questionsCount;
-        public int QuestionsCount
+        private void ShowSelectedTest(string selectedTestName)
         {
-            get
-            {
-                return questionsCount;
-            }
-            set
-            {
-                questionsCount = value;
-                OnPropertyChanged("QuestionsCount");
-            }
+            test = testsLogic.GetTest(selectedTestName);           
+            TestInformation = new SelectedTestViewModel(test);
         }
-
-        private bool contentVisibility = false;
-        public bool ContentVisibility
-        {
-            get
-            {
-                return contentVisibility;
-            }
-
-            set
-            {
-                if (value != contentVisibility)
-                {
-                    contentVisibility = value;
-                    OnPropertyChanged("ContentVisibility");
-                }
-            }
-        }
-
-        private RelayCommand showTestContent;
-        public RelayCommand ShowTestContent
-        {
-            get
-            {
-                return showTestContent ??
-                  (showTestContent = new RelayCommand(obj =>
-                  {
-                      ContentVisibility = true;
-                  }));
-            }
-        }        
     }
 }

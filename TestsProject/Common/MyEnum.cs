@@ -8,5 +8,12 @@
             Wrong,
             Right
         }
+
+        public enum Nodes
+        {
+            Theme,
+            SubTheme,
+            Test
+        }
     }
 }

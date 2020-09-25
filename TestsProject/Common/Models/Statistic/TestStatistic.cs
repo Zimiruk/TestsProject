@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Common.Models
 {
@@ -11,8 +10,12 @@ namespace Common.Models
 
         public int SuccessCount { get; set; }
 
+        public int AttempsCount { get; set; }
+
         public List<int> RightAnswersCount { get; set; }
 
-        public int AttempsCount { get; set; }
+        public List<double> RightAnswersProcent { get; set; }     
+
+        public int QuestionAmount { get; set; }        
     }
 }

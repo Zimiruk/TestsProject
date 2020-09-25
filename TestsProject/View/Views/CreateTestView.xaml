@@ -65,7 +65,7 @@
                 <TextBox Canvas.Left="110" Canvas.Top="30" Text="{Binding Test.TestName}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
                 <Label Content="Test theme:" Canvas.Left="240" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-                <TextBox Canvas.Left="320" Canvas.Top="30" Text="{Binding Test.ThemeName}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <TextBox Canvas.Left="320" Canvas.Top="30" Text="{Binding Test.TestTheme}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
 
                 <!-- TODO MayB make dialog window here -->
                 <Label Content="Subtheme:" Canvas.Left="450" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>

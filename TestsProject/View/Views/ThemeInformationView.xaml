@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="View.Views.ThemeInformationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:View.Views"
+        mc:Ignorable="d"
+        Height="450" Width="800">
+    <Grid x:Name="TestInfo" Grid.Column="1" Background ="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"></ColumnDefinition>
+                <ColumnDefinition Width="83*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Content="Theme:"></Label>
+            <Label x:Name="Theme" Grid.Column="1" Content="{Binding SelectedThemeStatistic.ObjectName}"></Label>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"></ColumnDefinition>
+                <ColumnDefinition Width="83*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"></ColumnDefinition>
+                <ColumnDefinition Width="191*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Right answers rate:"></Label>
+            <Label x:Name="Procent1" Grid.Column="1" Content="{Binding SelectedThemeStatistic.ProcentOfRight}"></Label>
+        </Grid>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140*"></ColumnDefinition>
+                <ColumnDefinition Width="144*"></ColumnDefinition>
+                <ColumnDefinition Width="123*"></ColumnDefinition>
+                <ColumnDefinition Width="688*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Tests sucess rate:"></Label>
+            <Label Grid.Column="1" Content="{Binding SelectedThemeStatistic.ProcentOfSuccess}"></Label>
+        </Grid>
+    </Grid>
+</UserControl>
