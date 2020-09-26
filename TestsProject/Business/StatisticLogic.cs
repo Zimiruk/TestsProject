@@ -10,9 +10,8 @@ namespace Business
     public class StatisticLogic
     {
         private StatisticFilesOperator statisticFiles = new StatisticFilesOperator();
-        private TestFilesOperations operations = new TestFilesOperations();
+        private TestFilesOperations testFiles = new TestFilesOperations();
 
-        /// TODO Right answers, success count etc
         public TestStatistic GetTestStatistic(string testName)
         {
             if (statisticFiles.CheckIfFileExists(testName, Constants.StatisticPath, "dat"))
@@ -36,12 +35,11 @@ namespace Business
                 return testStatistic;
             }
         }
-           
-        /// TODO If nothing
+   
         public StatisticByTheme GetTestStatisticByTheme(string testTheme)
         {
             List<TestStatistic> allStatistic = statisticFiles.GetAllStatistic();
-            List<TestForList> testsNames = operations.GetAllTestsNames();
+            List<TestForList> testsNames = testFiles.GetAllTestsNames();
 
             foreach (TestForList test in testsNames)
             {
@@ -89,7 +87,7 @@ namespace Business
         public StatisticByTheme GetTestStatisticByTheme(string testTheme, string testSubTheme)
         {
             List<TestStatistic> allStatistic = statisticFiles.GetAllStatistic();
-            List<TestForList> testsNames = operations.GetAllTestsNames();
+            List<TestForList> testsNames = testFiles.GetAllTestsNames();
 
             StatisticByTheme statisticByTheme = new StatisticByTheme();
             List<TestStatistic> foundStatistics = new List<TestStatistic>();
@@ -129,10 +127,9 @@ namespace Business
             return statisticByTheme;
         }
 
-        /// TODO Procents and mb something else
         public void UpdateTestStatistic(string testName, TestResult testResult, int questionsAmount)
         {
-            if (statisticFiles.CheckIfFileExists(testName, Constants.StatisticPath, "dat"))
+            if (statisticFiles.CheckIfFileExists(testName, Constants.StatisticPath, Constants.StatisticExtenstion))
             {
                 TestStatistic testStatistic = statisticFiles.OpenTestStatistic(testName);
                 testStatistic.AttempsCount++;
@@ -153,8 +150,14 @@ namespace Business
                 TestStatistic testStatistic = new TestStatistic() { 
                     Name = testName, 
                     AttempsCount = 1, 
-                    RightAnswersCount = new List<int>() { testResult.AmountOfRight }, 
-                    RightAnswersProcent = new List<double> { System.Math.Round((double)(Constants.Percent * testResult.AmountOfRight / questionsAmount), 2) } 
+                    RightAnswersCount = new List<int>() 
+                    {
+                        testResult.AmountOfRight 
+                    }, 
+                    RightAnswersProcent = new List<double> 
+                    { 
+                        System.Math.Round((double)(Constants.Percent * testResult.AmountOfRight / questionsAmount), 2) 
+                    } 
                 };
 
                 if (testResult.Passed)

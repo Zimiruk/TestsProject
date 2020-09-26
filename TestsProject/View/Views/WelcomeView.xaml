@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="View.Views.WelcomeView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:View.Views"
+        mc:Ignorable="d"
+        Height="450" Width="800">
+    <Canvas x:Name="TestInfo" Grid.Column="1" Background ="AliceBlue">
+        <TextBlock Canvas.Left="46" Canvas.Top="43" Text="This application intendet for creating and running self made tests." TextWrapping="Wrap" Height="40" Width="700" FontSize="22"/>
+        <TextBlock Canvas.Left="46" Canvas.Top="83" Text="From that two buttons at the top, you can navigate to application main components." TextWrapping="Wrap" Height="80" Width="700" FontSize="22"/>
+        <TextBlock Canvas.Left="46" Canvas.Top="163" Text="The created tests are saved on your hard drive." TextWrapping="Wrap" Height="80" Width="700" FontSize="22"/>
+    </Canvas>
+</UserControl>
+

@@ -19,14 +19,16 @@
     <Grid DockPanel.Dock ="Left" Background ="AliceBlue" RenderTransformOrigin="0.356,0.483">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="670"/>
         </Grid.RowDefinitions>
-        
-        <ContentControl Content="{Binding SelectedViewModel}"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Create new test" HorizontalAlignment="Left" Margin="10" Width="200" VerticalAlignment="Top" Command="{Binding UpdateViewCommand}" CommandParameter="Create"/>
             <Button Content="Open tests list" HorizontalAlignment="Left" Margin="10" Width="200" VerticalAlignment="Top" Command="{Binding UpdateViewCommand}" CommandParameter="List"/>
         </StackPanel>
+
+        <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}"/>
+        
     </Grid>
 </Window>

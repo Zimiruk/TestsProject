@@ -34,22 +34,25 @@
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30*"></ColumnDefinition>
-                <ColumnDefinition Width="191*"></ColumnDefinition>
+                <ColumnDefinition Width="119*"></ColumnDefinition>
+                <ColumnDefinition Width="41*"></ColumnDefinition>
+                <ColumnDefinition Width="640*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Right answers rate:"></Label>
             <Label x:Name="Procent1" Grid.Column="1" Content="{Binding SelectedThemeStatistic.ProcentOfRight}"></Label>
+            <Label Grid.Column="2" Content="%"></Label>
         </Grid>
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="140*"></ColumnDefinition>
-                <ColumnDefinition Width="144*"></ColumnDefinition>
-                <ColumnDefinition Width="123*"></ColumnDefinition>
-                <ColumnDefinition Width="688*"></ColumnDefinition>
+                <ColumnDefinition Width="102*"></ColumnDefinition>
+                <ColumnDefinition Width="30*"></ColumnDefinition>
+                <ColumnDefinition Width="30*"></ColumnDefinition>
+                <ColumnDefinition Width="503*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Tests sucess rate:"></Label>
             <Label Grid.Column="1" Content="{Binding SelectedThemeStatistic.ProcentOfSuccess}"></Label>
+            <Label Grid.Column="2" Content="%"></Label>
         </Grid>
     </Grid>
 </UserControl>

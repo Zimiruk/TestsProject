@@ -11,7 +11,6 @@ namespace Data
 {
     public class TestFilesOperations
     {
-        /// TODO Check all methods here
         public List<TestForList> GetAllTestsNames()
         {
             List<TestForList> tests = new List<TestForList>();
@@ -27,7 +26,7 @@ namespace Data
 
             BinaryFormatter formatter = new BinaryFormatter();
 
-            foreach (string file in Directory.EnumerateFiles(path, "*.test"))
+            foreach (string file in Directory.EnumerateFiles(path, $"*.{Constants.TestExtenstion}"))
             {
                 using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate))
                 {
@@ -43,7 +42,6 @@ namespace Data
             return tests;
         }
 
-        /// Not sure
         public List<Node> GetListForTree()
         {
            List<Node> nodes = new List<Node>();
@@ -117,8 +115,7 @@ namespace Data
 
             BinaryFormatter formatter = new BinaryFormatter();
 
-            ///TODO Exception
-            foreach (string file in Directory.EnumerateFiles(path, "*.test"))
+            foreach (string file in Directory.EnumerateFiles(path, $"*.{Constants.TestExtenstion}"))
             {
                 using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate))
                 {
@@ -141,7 +138,7 @@ namespace Data
 
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fileStream = File.Open($"{Constants.TestPath}\\{ test.Name}.test", FileMode.Create))
+            using (FileStream fileStream = File.Open($"{Constants.TestPath}\\{test.Name}.{Constants.TestExtenstion}", FileMode.Create))
 
             {
                 formatter.Serialize(fileStream, test);
@@ -154,14 +151,13 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();            
 
-            using (FileStream fileStream = File.Open($"{Constants.TestPath}\\{testName}.test", FileMode.OpenOrCreate))
+            using (FileStream fileStream = File.Open($"{Constants.TestPath}\\{testName}.{Constants.TestExtenstion}", FileMode.OpenOrCreate))
             {
                 Test test = (Test)formatter.Deserialize(fileStream);
                 return test;
             }
         }
 
-        /// TODO DoSomething here
         public bool CheckIfFileExists(string fileName, string fileDirectory, string fileExtention)
         {
             DirectoryInfo dirInfo = new DirectoryInfo(fileDirectory);
@@ -172,6 +168,14 @@ namespace Data
             }
 
             return File.Exists($"{fileDirectory}\\{fileName}.{fileExtention}");
+        }
+
+        public void DeleteTest(string testName)
+        {
+            if (File.Exists($"{Constants.TestPath}\\{testName}.{Constants.TestExtenstion}"))
+            {
+                File.Delete($"{Constants.TestPath}\\{testName}.{Constants.TestExtenstion}");
+            }
         }
     }
 }

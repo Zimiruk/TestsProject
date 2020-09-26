@@ -7,10 +7,7 @@
              xmlns:utility = "clr-namespace:ViewModel.Utility;assembly=ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewModels:CreateTestViewModel}">
-            <views:CreateTestView/>
-        </DataTemplate>
-        
+       
         <DataTemplate DataType="{x:Type viewModels:TestsListViewModel}">
             <views:TestsListView/>
         </DataTemplate>
@@ -30,13 +27,22 @@
         <DataTemplate DataType="{x:Type viewModels:ThemeInformationViewModel}">
             <views:ThemeInformationView/>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type viewModels:TestConstructorViewModel}">
+            <views:TestConstructorView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:WelcomeViewModel}">
+            <views:WelcomeView/>
+        </DataTemplate>
+
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <utility:BoolInverterConverter x:Key="BoolInverter"/>
         <utility:BooleanToVisibilityConverter
             
         x:Key="BooleanToVisibilityConverter" 
         True="Collapsed" 
-        False="Visible" />
+        False="Visible" />    
+        
     </Application.Resources>
 </Application>

@@ -6,6 +6,7 @@ using Common.Models.Statistic;
 using Common.Models.TestComponents;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ViewModel.Commands;
 using ViewModel.Utility;
 
 namespace ViewModel.ViewModels
@@ -42,8 +43,7 @@ namespace ViewModel.ViewModels
                 OnPropertyChanged("SelectedTestName");
             }
         }
-
-        /// TODO Delete?
+          
         private BaseViewModel testInformation;
 
         public BaseViewModel TestInformation
@@ -55,8 +55,7 @@ namespace ViewModel.ViewModels
                 OnPropertyChanged(nameof(TestInformation));
             }
         }
-
-        ///  TODO Send names to class
+          
         public void GetNode(Node node)
         {
             StatisticByTheme statisticByTheme;
@@ -96,7 +95,28 @@ namespace ViewModel.ViewModels
             }
         }
 
-        /// TODO On property changed?
+        private RelayCommand deleteTest;
+        public RelayCommand DeleteTest
+        {
+            get
+            {
+                return deleteTest ??= new RelayCommand(obj =>
+                {
+                    string name = obj.ToString();
+
+                    if (NotificationService.ShowDialogWindow(Constants.TestDelete, Constants.TestDeleteHeader))
+                    {
+                        testsLogic.DeleteTest(name);
+                        statisticLogic.DeleteStatistic(name);
+
+                        NotificationService.ShowMessageWindow(Constants.TestDeleted);
+                        UpdateLists();
+                        TestInformation = null;
+                    }
+                });
+            }
+        }
+
         private void UpdateLists()
         {
             Nodes.Clear();

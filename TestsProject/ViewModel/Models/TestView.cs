@@ -21,7 +21,7 @@ namespace ViewModel.Models
             set
             {
                 name = value;
-                OnPropertyChanged("TestName");
+                OnPropertyChanged("Name");
             }
         }
 
@@ -32,7 +32,7 @@ namespace ViewModel.Models
             set
             {
                 theme = value;
-                OnPropertyChanged("TestTheme");
+                OnPropertyChanged("Theme");
             }
         }
 

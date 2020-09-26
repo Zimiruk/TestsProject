@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Windows.Input;
 using ViewModel.Utility;
 using ViewModel.ViewModels;
@@ -23,19 +24,24 @@ namespace ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            ///TODO 
-            if (parameter is CommandParameter)
+            if (parameter is CommandParameter param)
             {
-                CommandParameter param = (CommandParameter)parameter;
+                if (param.Direction == Constants.Edit)
+                {
+                    viewModel.SelectedViewModel = new TestConstructorViewModel(param.Test);
+                }
 
-                viewModel.SelectedViewModel = new TestRunViewModel(param.Test);
+                else
+                {
+                    viewModel.SelectedViewModel = new TestRunViewModel(param.Test);
+                }
             }
 
             else
             {
-                if (parameter.ToString() == "Create")
+                if (parameter.ToString() == Constants.Create)
                 {
-                    viewModel.SelectedViewModel = new CreateTestViewModel();
+                    viewModel.SelectedViewModel = new TestConstructorViewModel();
                 }
 
                 else

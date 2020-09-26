@@ -5,7 +5,7 @@ namespace ViewModel.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private BaseViewModel _selectedViewModel = new TestsListViewModel();
+        private BaseViewModel _selectedViewModel = new WelcomeViewModel();
 
         public BaseViewModel SelectedViewModel
         {

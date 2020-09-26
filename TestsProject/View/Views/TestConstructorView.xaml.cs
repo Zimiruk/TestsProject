@@ -1,8 +1,8 @@
 ﻿namespace View.Views
 {
-    public partial class SelectedTestView
+    public partial class TestConstructorView
     {
-        public SelectedTestView()
+        public TestConstructorView()
         {
             InitializeComponent();
         }

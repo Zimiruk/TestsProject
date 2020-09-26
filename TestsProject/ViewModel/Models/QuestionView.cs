@@ -13,7 +13,7 @@ namespace ViewModel.Models
             set
             {
                 number = value;
-                OnPropertyChanged("QuestionNumber");
+                OnPropertyChanged("Number");
             }
         }
 
@@ -29,7 +29,7 @@ namespace ViewModel.Models
             set
             {
                 content = value;
-                OnPropertyChanged("QuestionContent");
+                OnPropertyChanged("Content");
             }
         }
 
