@@ -98,10 +98,10 @@
 
             <Canvas>
                 <Label Content="Test name:" Canvas.Left="35" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-                <TextBlock x:Name="TestNameBox" Canvas.Left="110" Canvas.Top="30" Text="{Binding Test.TestName}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14"/>
+                <TextBlock x:Name="TestNameBox" Canvas.Left="110" Canvas.Top="30" Text="{Binding Test.Name}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14"/>
 
                 <Label Content="Test theme:" Canvas.Left="240" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-                <TextBlock Canvas.Left="320" Canvas.Top="30" Text="{Binding Test.TestTheme}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14"/>
+                <TextBlock Canvas.Left="320" Canvas.Top="30" Text="{Binding Test.Theme}" TextWrapping="Wrap" Width="120" Height="30" FontSize="14"/>
 
                 <Label Content="Subthemes:" Canvas.Left="450" Canvas.Top="25" Height="30" Width="90" FontSize="14"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
                 <Expander Canvas.Left="560" Canvas.Top="30"  Width="120" Background="LightGreen" Panel.ZIndex="1">
@@ -141,7 +141,7 @@
                 </Button>
 
                 <Border Canvas.Left="35" Canvas.Top="100" BorderThickness="1" BorderBrush="Black">
-                    <TextBlock Padding="10" x:Name="QuestionContent" Height="150" Text="{Binding SelectedQuestion.QuestionContent}" TextWrapping="Wrap" Width="1010" FontSize="18"/>
+                    <TextBlock Padding="10" x:Name="QuestionContent" Height="150" Text="{Binding SelectedQuestion.Content}" TextWrapping="Wrap" Width="1010" FontSize="18"/>
                 </Border>
 
                 <Button Content="Last question" Canvas.Left="35" Canvas.Top="300" Height="30" Width="120"/>
@@ -193,7 +193,7 @@
 
                 <Border Canvas.Left="35" Canvas.Top="440" Width="1010" Height="180" BorderThickness="1" BorderBrush="Black">
                     <StackPanel Grid.Column="0" Margin="0,6,6,0" >
-                        <TextBox x:Name="OpenAnswerItem" Text="{Binding SelectedQuestion.Answers[0].AnswerContent}" Width="400" >
+                        <TextBox x:Name="OpenAnswerItem" Text="{Binding SelectedQuestion.Answers[0].Content}" Width="400" >
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}">
                                     <Style.Triggers>
@@ -269,7 +269,7 @@
                                                 </Style>
                                             </CheckBox.Style>
                                         </CheckBox>
-                                        <TextBlock x:Name="AnswerItem" Text="{Binding AnswerContent}" Width="500" Margin="120,0,0,0"/>
+                                        <TextBlock x:Name="AnswerItem" Text="{Binding Content}" Width="500" Margin="120,0,0,0"/>
                                     </WrapPanel>
                                     <DataTemplate.Triggers>
 

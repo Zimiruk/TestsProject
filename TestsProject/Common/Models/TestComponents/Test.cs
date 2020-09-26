@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Common.Models
+namespace Common.Models.TestComponents
 {
     [Serializable]
     public class Test

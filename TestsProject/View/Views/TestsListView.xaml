@@ -37,10 +37,8 @@
                                     </Style>
                                 </TreeView.ItemContainerStyle>
                                 <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate DataType="{x:Type TextBox}" ItemsSource="{Binding Nodes}">
-                                        <!--   <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Command="{Binding GetStatistic}"> -->
-                                        <TextBlock Text="{Binding ViewName}" />
-                                        <!--   </Button> -->
+                                    <HierarchicalDataTemplate DataType="{x:Type TextBox}" ItemsSource="{Binding Nodes}">                                   
+                                        <TextBlock Text="{Binding ViewName}" />                                   
                                     </HierarchicalDataTemplate>
                                 </TreeView.ItemTemplate>
                             </TreeView>

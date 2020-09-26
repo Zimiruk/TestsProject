@@ -2,6 +2,7 @@
 {
     public static class MyEnum
     {
+        /*
         public enum Status
         {
             Default,
@@ -15,5 +16,6 @@
             SubTheme,
             Test
         }
+        */
     }
 }

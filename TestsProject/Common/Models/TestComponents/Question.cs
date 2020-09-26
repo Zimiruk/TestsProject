@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Common.Models
+namespace Common.Models.TestComponents
 {
     [Serializable]
     public class Question
     {
-        public string QuestionContent { get; set; }
+        public string Content { get; set; }
 
         public List<Answer> Answers { get; set; }
 

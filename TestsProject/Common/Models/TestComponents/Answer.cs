@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common.Models
+namespace Common.Models.TestComponents
 {
     [Serializable]
     public class Answer

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Common.Models
+namespace Common.Models.Others
 {
     /// TODO TestName
     public class TestsThemeForList
     {
-        public string ThemeName { get; set; }
+        public string Name { get; set; }
 
         public List<SubThemeForList> Subthemes { get; set; }
     }

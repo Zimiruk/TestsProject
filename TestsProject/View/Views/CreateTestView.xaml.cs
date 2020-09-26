@@ -11,7 +11,7 @@ namespace View.Views
         {
             InitializeComponent();
         }
-
+        /*
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = IsValid(sender as DependencyObject);
@@ -21,5 +21,6 @@ namespace View.Views
         {
             return !Validation.GetHasError(obj) && LogicalTreeHelper.GetChildren(obj).OfType<DependencyObject>().All(IsValid);
         }
+        */
     }
 }

@@ -1,5 +1,7 @@
-﻿using Common;
-using Common.Models;
+﻿using Business.Models;
+using Common;
+using Common.Models.Others;
+using Common.Models.Statistic;
 using Data;
 using System.Collections.Generic;
 
@@ -13,7 +15,7 @@ namespace Business
         /// TODO Right answers, success count etc
         public TestStatistic GetTestStatistic(string testName)
         {
-            if (statisticFiles.CheckIfFileExists(testName, "TestsStatistic", "dat"))
+            if (statisticFiles.CheckIfFileExists(testName, Constants.StatisticPath, "dat"))
             {
                 TestStatistic testStatistic = statisticFiles.OpenTestStatistic(testName);
                 return testStatistic;
@@ -21,29 +23,42 @@ namespace Business
 
             else
             {
-                TestStatistic testStatistic = new TestStatistic() { TestName = testName, AttempsCount = 0, RightAnswersCount = new List<int> (), SuccessCount = 0, RightAnswersProcent = new List<double>() };
+                TestStatistic testStatistic = new TestStatistic()
+                {     
+                    Name = testName, 
+                    AttempsCount = 0, 
+                    RightAnswersCount = new List<int>(), 
+                    SuccessCount = 0, 
+                    RightAnswersProcent = new List<double>() 
+                };
+
                 statisticFiles.CreateTestStatistic(testStatistic);
                 return testStatistic;
             }
         }
-
-        /// TODO Report
+           
+        /// TODO If nothing
         public StatisticByTheme GetTestStatisticByTheme(string testTheme)
         {
             List<TestStatistic> allStatistic = statisticFiles.GetAllStatistic();
             List<TestForList> testsNames = operations.GetAllTestsNames();
 
+            foreach (TestForList test in testsNames)
+            {
+                GetTestStatistic(test.Name);
+            }
+
             StatisticByTheme statisticByTheme = new StatisticByTheme();
             List<TestStatistic> foundStatistics = new List<TestStatistic>();
 
             statisticByTheme.ObjectName = testTheme;
-            statisticByTheme.ObjectType = MyEnum.Nodes.Theme;
+            statisticByTheme.ObjectType = Constants.Theme;
 
-            testsNames = testsNames.FindAll(x => x.TestTheme == testTheme);
+            testsNames = testsNames.FindAll(x => x.Theme == testTheme);
 
             foreach (TestForList test in testsNames)
             {
-                foundStatistics.Add(allStatistic.Find(x => x.TestName == test.TestName));
+                foundStatistics.Add(allStatistic.Find(x => x.Name == test.Name));
             }
 
             statisticByTheme.TestsAmount = foundStatistics.Count;
@@ -53,7 +68,7 @@ namespace Business
                 if(foundStatistic.AttempsCount > 0)
                 {
                     double value = 0;
-                    double sucessProcent = System.Math.Round((double) foundStatistic.SuccessCount * 100 / foundStatistic.AttempsCount, 2);
+                    double sucessProcent = System.Math.Round((double) foundStatistic.SuccessCount * Constants.Percent / foundStatistic.AttempsCount, 2);
 
                     foreach (double procentValue in foundStatistic.RightAnswersProcent)
                     {
@@ -65,8 +80,8 @@ namespace Business
                 }
             }
 
-            statisticByTheme.ProcentOfRight = System.Math.Round((double)statisticByTheme.ProcentOfRight / foundStatistics.Count, 2);
-            statisticByTheme.ProcentOfSuccess = System.Math.Round((double)statisticByTheme.ProcentOfSuccess / foundStatistics.Count, 2);
+            statisticByTheme.ProcentOfRight = System.Math.Round(statisticByTheme.ProcentOfRight / foundStatistics.Count, 2);
+            statisticByTheme.ProcentOfSuccess = System.Math.Round(statisticByTheme.ProcentOfSuccess / foundStatistics.Count, 2);
 
             return statisticByTheme;
         }
@@ -80,13 +95,13 @@ namespace Business
             List<TestStatistic> foundStatistics = new List<TestStatistic>();
 
             statisticByTheme.ObjectName = testSubTheme;
-            statisticByTheme.ObjectType = MyEnum.Nodes.SubTheme;
+            statisticByTheme.ObjectType = Constants.SubTheme;
 
-            testsNames = testsNames.FindAll(x => x.TestTheme == testTheme && x.SubThemes.Contains(testSubTheme));
+            testsNames = testsNames.FindAll(x => x.Theme == testTheme && x.SubThemes.Contains(testSubTheme));
 
             foreach (TestForList test in testsNames)
             {
-                foundStatistics.Add(allStatistic.Find(x => x.TestName == test.TestName));
+                foundStatistics.Add(allStatistic.Find(x => x.Name == test.Name));
             }
 
             statisticByTheme.TestsAmount = foundStatistics.Count;
@@ -96,7 +111,7 @@ namespace Business
                 if (foundStatistic.AttempsCount > 0)
                 {
                     double value = 0;
-                    double sucessProcent = System.Math.Round((double)foundStatistic.SuccessCount * 100 / foundStatistic.AttempsCount, 2);
+                    double sucessProcent = System.Math.Round((double)foundStatistic.SuccessCount * Constants.Percent / foundStatistic.AttempsCount, 2);
 
                     foreach (double procentValue in foundStatistic.RightAnswersProcent)
                     {
@@ -117,12 +132,12 @@ namespace Business
         /// TODO Procents and mb something else
         public void UpdateTestStatistic(string testName, TestResult testResult, int questionsAmount)
         {
-            if (statisticFiles.CheckIfFileExists(testName, "TestsStatistic", "dat"))
+            if (statisticFiles.CheckIfFileExists(testName, Constants.StatisticPath, "dat"))
             {
                 TestStatistic testStatistic = statisticFiles.OpenTestStatistic(testName);
                 testStatistic.AttempsCount++;
 
-                testStatistic.RightAnswersProcent.Add(System.Math.Round((double)(100 * testResult.AmountOfRight / questionsAmount), 2));
+                testStatistic.RightAnswersProcent.Add(System.Math.Round((double)(Constants.Percent * testResult.AmountOfRight / questionsAmount), 2));
                 testStatistic.RightAnswersCount.Add(testResult.AmountOfRight);
 
                 if (testResult.Passed)
@@ -136,10 +151,10 @@ namespace Business
             else
             {
                 TestStatistic testStatistic = new TestStatistic() { 
-                    TestName = testName, 
+                    Name = testName, 
                     AttempsCount = 1, 
                     RightAnswersCount = new List<int>() { testResult.AmountOfRight }, 
-                    RightAnswersProcent = new List<double> { System.Math.Round((double)(100 * testResult.AmountOfRight / questionsAmount), 2) } 
+                    RightAnswersProcent = new List<double> { System.Math.Round((double)(Constants.Percent * testResult.AmountOfRight / questionsAmount), 2) } 
                 };
 
                 if (testResult.Passed)

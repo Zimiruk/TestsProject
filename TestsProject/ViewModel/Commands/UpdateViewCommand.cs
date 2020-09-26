@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using ViewModel.Utility;
+using ViewModel.ViewModels;
 
 namespace ViewModel.Commands
 {
@@ -37,7 +38,7 @@ namespace ViewModel.Commands
                     viewModel.SelectedViewModel = new CreateTestViewModel();
                 }
 
-                else if (parameter.ToString() == "List")
+                else
                 {
                     viewModel.SelectedViewModel = new TestsListViewModel();
                 }
@@ -45,4 +46,3 @@ namespace ViewModel.Commands
         }
     }
 }
-

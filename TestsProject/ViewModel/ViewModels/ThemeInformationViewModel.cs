@@ -1,6 +1,6 @@
-﻿using Common.Models;
+﻿using Common.Models.Statistic;
 
-namespace ViewModel
+namespace ViewModel.ViewModels
 {
     public class ThemeInformationViewModel : BaseViewModel
     {

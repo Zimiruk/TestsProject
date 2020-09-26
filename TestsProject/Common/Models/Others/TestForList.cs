@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Common.Models
+namespace Common.Models.Others
 {
     public class TestForList
     {
-        public string TestName { get; set; }
+        public string Name { get; set; }
 
-        public string TestTheme { get; set; }
+        public string Theme { get; set; }
 
         public List<string> SubThemes { get; set; }
     }

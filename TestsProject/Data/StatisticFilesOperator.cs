@@ -1,5 +1,5 @@
 ﻿using Common;
-using Common.Models;
+using Common.Models.Statistic;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -18,30 +18,25 @@ namespace Data
                 dirInfo.Create();
             }
 
-            if (File.Exists($"{fileDirectory}\\{fileName}.{fileExtention}"))
-            {
-                return true;
-            }
-
-            else return false;
+            return File.Exists($"{fileDirectory}\\{fileName}.{fileExtention}");
         }
 
         public TestStatistic OpenTestStatistic(string testName)
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fileStream = File.Open($"TestsStatistic\\{testName}.dat", FileMode.Open))
+            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testName}.dat", FileMode.OpenOrCreate))
             {
                 TestStatistic testStatistic = (TestStatistic)formatter.Deserialize(fileStream);
                 return testStatistic;
             }
         }
-
+        
         public void CreateTestStatistic(TestStatistic testStatistic)
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fileStream = File.Open($"TestsStatistic\\{testStatistic.TestName}.dat", FileMode.Create))
+            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testStatistic.Name}.dat", FileMode.Create))
             {
                 formatter.Serialize(fileStream, testStatistic);
             }
@@ -51,7 +46,7 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fileStream = File.Open($"TestsStatistic\\{testStatistic.TestName}.dat", FileMode.Open))
+            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testStatistic.Name}.dat", FileMode.OpenOrCreate))
             {
                 formatter.Serialize(fileStream, testStatistic);
             }
@@ -59,9 +54,9 @@ namespace Data
 
         public void DeleteStatistic(string testName)
         {
-            if (File.Exists($"TestsStatistic\\{testName}.dat"))
+            if (File.Exists($"{Constants.StatisticPath}\\{testName}.dat"))
             {
-                File.Delete($"TestsStatistic\\{testName}.dat");
+                File.Delete($"{Constants.StatisticPath}\\{testName}.dat");
             }
         }
 
@@ -71,11 +66,18 @@ namespace Data
             List<TestStatistic> statistics = new List<TestStatistic>();
 
             string path = $"{Constants.StatisticPath}";
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+
             BinaryFormatter formatter = new BinaryFormatter();
 
             foreach (string file in Directory.EnumerateFiles(path, "*.dat"))
             {
-                using (FileStream fileStream = File.Open(file, FileMode.Open))
+                using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate))
                 {
                     TestStatistic testStatistic = (TestStatistic)formatter.Deserialize(fileStream);
                     statistics.Add(testStatistic);
@@ -86,4 +88,3 @@ namespace Data
         }
     }
 }
-

@@ -1,6 +1,6 @@
-﻿using Business;
+﻿using Business.Models;
 
-namespace ViewModel
+namespace ViewModel.ViewModels
 {
     public class TestResultViewModel : BaseViewModel
     {

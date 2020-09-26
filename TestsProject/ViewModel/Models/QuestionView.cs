@@ -1,5 +1,4 @@
-﻿using Common;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -7,13 +6,13 @@ namespace ViewModel.Models
 {
     public class QuestionView : INotifyPropertyChanged
     {
-        private int questionNumber;
-        public int QuestionNumber
+        private int number;
+        public int Number
         {
-            get { return questionNumber; }
+            get { return number; }
             set
             {
-                questionNumber = value;
+                number = value;
                 OnPropertyChanged("QuestionNumber");
             }
         }
@@ -23,13 +22,13 @@ namespace ViewModel.Models
             this.Answers = new ObservableCollection<AnswerView>();
         }
 
-        private string questionContent;
-        public string QuestionContent
+        private string content;
+        public string Content
         {
-            get { return questionContent; }
+            get { return content; }
             set
             {
-                questionContent = value;
+                content = value;
                 OnPropertyChanged("QuestionContent");
             }
         }
@@ -48,8 +47,8 @@ namespace ViewModel.Models
             }
         }
 
-        private MyEnum.Status color;
-        public MyEnum.Status Color
+        private string color;
+        public string Color
         {
             get
             {
@@ -76,14 +75,12 @@ namespace ViewModel.Models
             }
         }
 
-
-        public ObservableCollection<AnswerView> Answers { get; set; }       
+        public ObservableCollection<AnswerView> Answers { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

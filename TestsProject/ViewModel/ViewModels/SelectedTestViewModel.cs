@@ -1,11 +1,12 @@
 ﻿using Business;
-using Common.Models;
+using Common.Models.Statistic;
+using Common.Models.TestComponents;
 using System;
 using System.Linq;
 using ViewModel.Models;
 using ViewModel.Utility;
 
-namespace ViewModel
+namespace ViewModel.ViewModels
 {
     public class SelectedTestViewModel : BaseViewModel
     {
@@ -21,8 +22,8 @@ namespace ViewModel
         {
             _test = test;
 
-            SelectedTest.TestName = _test.Name;
-            SelectedTest.TestTheme = _test.Theme;
+            SelectedTest.Name = _test.Name;
+            SelectedTest.Theme = _test.Theme;
 
             QuestionsCount = _test.Questions.Count;
 
@@ -62,7 +63,6 @@ namespace ViewModel
             }
         }
 
-
         private TestStatisticView selectedTestStatistic = new TestStatisticView();
         public TestStatisticView SelectedTestStatistic
         {
@@ -76,7 +76,6 @@ namespace ViewModel
                 OnPropertyChanged("SelectedTestStatistic");
             }
         }
-
 
         private int questionsCount;
         public int QuestionsCount
@@ -93,4 +92,3 @@ namespace ViewModel
         }
     }
 }
-

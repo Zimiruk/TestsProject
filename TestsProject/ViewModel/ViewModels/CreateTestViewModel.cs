@@ -1,6 +1,7 @@
 ﻿using Business;
-using Common.Models;
+using Business.Models;
 using Common;
+using Common.Models.TestComponents;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,8 +9,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using ViewModel.Commands;
 using ViewModel.Models;
+using ViewModel.Utility;
 
-namespace ViewModel
+namespace ViewModel.ViewModels
 {
     public class CreateTestViewModel : BaseViewModel, INotifyPropertyChanged
     {
@@ -19,7 +21,8 @@ namespace ViewModel
         public CreateTestViewModel()
         {
             test = new TestView();
-            test.TestName = "Test";
+            test.Name =  Constants.Default;
+            test.Theme = Constants.Default;
             test.ShowAnswerAtEnd = true;
 
             test.SubThemes = new ObservableCollection<string>();
@@ -82,13 +85,12 @@ namespace ViewModel
         {
             get
             {
-                return saveTest ??
-                  (saveTest = new RelayCommand(obj =>
+                return saveTest ??= new RelayCommand(obj =>
                   {
                       Test testForSaving = new Test();
 
-                      testForSaving.Name = test.TestName;
-                      testForSaving.Theme = test.TestTheme;
+                      testForSaving.Name = test.Name;
+                      testForSaving.Theme = test.Theme;
                       testForSaving.Questions = new List<Question>();
                       testForSaving.TimerCountdown = test.TimerMinute * 60 + test.TimerSecond;
                       testForSaving.ShowAnswerAtEnd = test.ShowAnswerAtEnd;
@@ -104,13 +106,16 @@ namespace ViewModel
                       foreach (QuestionView question in test.Questions)
                       {
                           Question questionForSaving = new Question();
-                          questionForSaving.QuestionContent = question.QuestionContent;
+                          questionForSaving.Content = question.Content;
                           questionForSaving.IsOpen = question.IsOpen;
                           questionForSaving.Answers = new List<Answer>();
 
                           foreach (AnswerView answer in question.Answers)
                           {
-                              questionForSaving.Answers.Add(new Answer { Content = answer.AnswerContent, IsItRight = answer.IsRight });
+                              questionForSaving.Answers.Add(new Answer 
+                              { 
+                                  Content = answer.Content, IsItRight = answer.IsRight 
+                              });
                           }
 
                           testForSaving.Questions.Add(questionForSaving);
@@ -121,34 +126,34 @@ namespace ViewModel
                       /// TODO 4x if                 
                       if (creationReport.Result)
                       {
-                          ///TODO Fix that
-                          ///Use converter
+                          ///TODO Fix that    
                           if (testsLogic.CheckIfFileExists(testForSaving.Name, Constants.TestPath, "test"))
                           {
-                              MessageBoxResult result = MessageBox.Show("Test with such name already exist \n You want to overwrite it with new one?", "Something happend", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                              if (result == MessageBoxResult.Yes)
+                              if (NotificationService.ShowDialogWindow(Constants.TestExistsNotification, Constants.TestExistsNotificationHeading))
                               {
-                                  testsLogic.SaveTest(testForSaving);
                                   statisticLogic.DeleteStatistic(testForSaving.Name);
-                                  MessageBox.Show("Test saved");
-                              }
+                                  testsLogic.SaveTest(testForSaving);
+                                  NotificationService.ShowMessageWindow(Constants.TestAdded);
+                              }                             
                           }
 
                           else
-                          {
+                          {                              
                               testsLogic.SaveTest(testForSaving);
-                              MessageBox.Show("Test saved");
+                              NotificationService.ShowMessageWindow(Constants.TestAdded);                           
                           }
                       }
 
                       else
                       {
-                          MessageBox.Show(creationReport.Message);
+                          NotificationService.ShowMessageWindow(creationReport.Message);
                           if (creationReport.BadQuestions.Count != 0)
+                          {
                               SelectedQuestion = Questions[creationReport.BadQuestions[0]];
+                          }
+                              
                       }
-                  }));
+                  });
             }
         }
 
@@ -171,23 +176,28 @@ namespace ViewModel
         {
             get
             {
-                return addQuestion ??
-                  (addQuestion = new RelayCommand(obj =>
+                return addQuestion ??= new RelayCommand(obj =>
                   {
                       AddAnswerButtonVisibility = true;
 
                       QuestionView question = new QuestionView();
 
-                      question.QuestionContent = "Default question";
+                      question.Content = Constants.Default;
                       question.IsOpen = false;
 
-                      question.Answers.Add(new AnswerView() { AnswerContent = "Default", IsRight = true });
-                      question.Answers.Add(new AnswerView() { AnswerContent = "Default", IsRight = true });
+                      question.Answers.Add(new AnswerView 
+                      { 
+                          Content = Constants.Default, IsRight = true 
+                      });
+                      question.Answers.Add(new AnswerView 
+                      { 
+                          Content = Constants.Default, IsRight = true 
+                      });
 
                       test.Questions.Add(question);
 
                       SelectedQuestion = question;
-                  }));
+                  });
             }
         }
 
@@ -196,22 +206,24 @@ namespace ViewModel
         {
             get
             {
-                return addOpenQuestion ??
-                  (addOpenQuestion = new RelayCommand(obj =>
+                return addOpenQuestion ??= new RelayCommand(obj =>
                   {
                       AddAnswerButtonVisibility = false;
 
                       QuestionView question = new QuestionView();
 
-                      question.QuestionContent = "Default question";
+                      question.Content = Constants.Default;
                       question.IsOpen = true;
 
-                      question.Answers.Add(new AnswerView() { AnswerContent = "Default", IsRight = true });
+                      question.Answers.Add(new AnswerView 
+                      { 
+                          Content = Constants.Default, IsRight = true 
+                      });
 
                       test.Questions.Add(question);
 
                       SelectedQuestion = question;
-                  }));
+                  });
             }
         }
 
@@ -220,8 +232,7 @@ namespace ViewModel
         {
             get
             {
-                return removeQuestion ??
-                  (removeQuestion = new RelayCommand(obj =>
+                return removeQuestion ??= new RelayCommand(obj =>
                   {
                       Questions.Remove(SelectedQuestion);
 
@@ -229,7 +240,7 @@ namespace ViewModel
                       {
                           SelectedQuestion = Questions[0];
                       }
-                  }));
+                  });
             }
         }
 
@@ -238,8 +249,7 @@ namespace ViewModel
         {
             get
             {
-                return addAnswer ??
-                  (addAnswer = new RelayCommand(obj =>
+                return addAnswer ??= new RelayCommand(obj =>
                   {
                       if (selectedQuestion.Answers.Count == 6)
                       {
@@ -247,9 +257,12 @@ namespace ViewModel
                       }
                       else
                       {
-                          selectedQuestion.Answers.Add(new AnswerView() { AnswerContent = "Default", IsRight = true });
+                          selectedQuestion.Answers.Add(new AnswerView 
+                          {
+                              Content = Constants.Default, IsRight = true 
+                          });
                       }
-                  }));
+                  });
             }
         }
 
@@ -258,11 +271,10 @@ namespace ViewModel
         {
             get
             {
-                return removeAnswer ??
-                  (removeAnswer = new RelayCommand(obj =>
+                return removeAnswer ??= new RelayCommand(obj =>
                   {
                       SelectedQuestion.Answers.Remove(obj as AnswerView);
-                  }));
+                  });
             }
         }
 
@@ -271,8 +283,7 @@ namespace ViewModel
         {
             get
             {
-                return addSubtheme ??
-                  (addSubtheme = new RelayCommand(obj =>
+                return addSubtheme ??= new RelayCommand(obj =>
                   {
                       bool found = false;
 
@@ -282,24 +293,22 @@ namespace ViewModel
                           {
                               found = true;
                               break;
-                          }                              
+                          }
                       }
 
-                      if(!found)
+                      if (!found)
                       {
                           SubThemes.Add(SubTheme);
                           SubTheme = "";
                       }
 
-                  }));
+                  });
             }
         }
 
         public new event PropertyChangedEventHandler PropertyChanged;
         public new void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-    }
-}
+    }}

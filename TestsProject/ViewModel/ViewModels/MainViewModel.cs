@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using ViewModel.Commands;
 
-namespace ViewModel
+namespace ViewModel.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {

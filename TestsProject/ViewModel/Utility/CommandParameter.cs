@@ -1,4 +1,4 @@
-﻿using Common.Models;
+﻿using Common.Models.TestComponents;
 
 namespace ViewModel.Utility
 {

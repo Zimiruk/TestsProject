@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Common;
 
 namespace ViewModel.Models
 {
     public class AnswerView : INotifyPropertyChanged
     {      
-        private string answerContent;
-        public string AnswerContent
+        private string сontent;
+        public string Content
         {
-            get { return answerContent; }
+            get { return сontent; }
             set
             {
-                answerContent = value;
+                сontent = value;
                 OnPropertyChanged("AnswerContent");
             }
         }
@@ -28,8 +27,8 @@ namespace ViewModel.Models
             }
         }
 
-        private MyEnum.Status color;
-        public MyEnum.Status Color
+        private string color;
+        public string Color
         {
             get
             {
@@ -44,9 +43,8 @@ namespace ViewModel.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        {           
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

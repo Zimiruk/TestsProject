@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Business
+namespace Business.Models
 {
     public class QuestionResult
     {
-        public int QuestionId { get; set; }
+        public int Id { get; set; }
 
         public bool IsRight { get; set; }
 

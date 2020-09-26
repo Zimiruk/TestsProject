@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 
-namespace Common.Models
+namespace Common.Models.Others
 {
     public class Node : INotifyPropertyChanged
     {
         public delegate void NodeHandler(Node message);
         public static event NodeHandler SendNode;
 
-        private static object _selectedItem = null;
+        private static object _selectedItem;
         public string Name { get; set; }
         public ObservableCollection<Node> Nodes { get; set; }
 
         public string DaddyName { get; set; }
-        public MyEnum.Nodes NodeType { get; set; }
+        public string NodeType { get; set; }
 
         public string ViewName { get; set; }
 
@@ -62,9 +59,7 @@ namespace Common.Models
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            var handler = this.PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

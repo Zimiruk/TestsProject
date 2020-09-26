@@ -6,6 +6,6 @@ namespace ViewModel.Utility
     {
         public BooleanToVisibilityConverter() :
             base(Visibility.Visible, Visibility.Collapsed)
-        { }
+        { }        
     }
 }

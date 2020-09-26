@@ -1,6 +1,7 @@
 ﻿using Business;
+using Business.Models;
 using Common;
-using Common.Models;
+using Common.Models.TestComponents;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,7 @@ using ViewModel.Commands;
 using ViewModel.Models;
 using ViewModel.Utility;
 
-namespace ViewModel
+namespace ViewModel.ViewModels
 {
     public class TestRunViewModel : BaseViewModel, INotifyPropertyChanged
     {
@@ -33,18 +34,13 @@ namespace ViewModel
         }
 
         public Test TestToRun { get; set; }
-
-        private TestView test;
-        public TestView Test
-        {
-            get { return test; }
-        }
+        public TestView Test { get; private set; }
 
         public ObservableCollection<QuestionView> Questions
         {
             get
             {
-                return test.Questions;
+                return Test.Questions;
             }
         }
 
@@ -52,10 +48,9 @@ namespace ViewModel
         {
             get
             {
-                return test.SubThemes;
+                return Test.SubThemes;
             }
         }
-
 
         private QuestionView selectedQuestion;
         public QuestionView SelectedQuestion
@@ -134,7 +129,6 @@ namespace ViewModel
 
         #endregion
 
-
         private BaseViewModel _testRunContent;
 
         public BaseViewModel TestRunContent
@@ -145,56 +139,60 @@ namespace ViewModel
                 _testRunContent = value;
                 OnPropertyChanged(nameof(TestRunContent));
             }
-        }       
+        }
 
         private void FillTestViewWithContent()
         {
-            test = new TestView();
-            test.TestName = TestToRun.Name;
-            test.TestTheme = TestToRun.Theme;
-            test.ShowAnswerAtEnd = TestToRun.ShowAnswerAtEnd;
+            Test = new TestView();
+            Test.Name = TestToRun.Name;
+            Test.Theme = TestToRun.Theme;
+            Test.ShowAnswerAtEnd = TestToRun.ShowAnswerAtEnd;
 
-            test.SubThemes = new ObservableCollection<string>();
+            Test.SubThemes = new ObservableCollection<string>();
 
-            if(TestToRun.SubThemes != null)
+            if (TestToRun.SubThemes != null)
             {
                 foreach (string subTheme in TestToRun.SubThemes)
                 {
-                    test.SubThemes.Add(subTheme);
+                    Test.SubThemes.Add(subTheme);
                 }
             }
 
-            test.Questions = new ObservableCollection<QuestionView>();
+            Test.Questions = new ObservableCollection<QuestionView>();
 
             for (int i = 0; i < TestToRun.Questions.Count; i++)
             {
                 QuestionView questionView = new QuestionView
                 {
-                    QuestionNumber = i,
-                    QuestionContent = TestToRun.Questions[i].QuestionContent,
-                    Color = MyEnum.Status.Default,
+                    Number = i,
+                    Content = TestToRun.Questions[i].Content,
+                    Color = Constants.Default,
                     IsOpen = TestToRun.Questions[i].IsOpen,
                     IsCheсked = false
                 };
-                test.Questions.Add(questionView);
+                Test.Questions.Add(questionView);
 
                 foreach (Answer answer in TestToRun.Questions[i].Answers)
                 {
-                    if (questionView.IsOpen)
-                    {
-                        questionView.Answers.Add(new AnswerView { AnswerContent = "", IsRight = true });
-                    }
+                    questionView.Answers.Add(questionView.IsOpen
+                        ? new AnswerView { Content = "", IsRight = true }
+                        : new AnswerView { Content = answer.Content, IsRight = false });
 
-                    else
-                    {
-                        questionView.Answers.Add(new AnswerView { AnswerContent = answer.Content, IsRight = false });
-                    }
+
+                    /*   if (questionView.IsOpen)
+                       {
+                           questionView.Answers.Add(new AnswerView { Content = "", IsRight = true });
+                       }
+
+                       else
+                       {
+                           questionView.Answers.Add(new AnswerView { Content = answer.Content, IsRight = false });
+                       }*/
                 }
             }
 
-            SelectedQuestion = test.Questions[0];
+            SelectedQuestion = Test.Questions[0];
         }
-
 
         private void UpdateFormColors()
         {
@@ -209,23 +207,23 @@ namespace ViewModel
 
         private void SetColorsToQuestion(QuestionResult questionResult)
         {
-            int id = questionResult.QuestionId;
+            int id = questionResult.Id;
 
-            Questions[id].Color = MyEnum.Status.Right;
+            Questions[id].Color = Constants.Right;
 
             if (!questionResult.IsRight)
-                Questions[id].Color = MyEnum.Status.Wrong;
+                Questions[id].Color = Constants.Wrong;
 
             if (questionResult.IsOpen)
             {
                 if (questionResult.IsRight)
                 {
-                    Questions[id].Answers[0].Color = MyEnum.Status.Right;
+                    Questions[id].Answers[0].Color = Constants.Right;
                 }
 
                 else
                 {
-                    Questions[id].Answers[0].Color = MyEnum.Status.Wrong;
+                    Questions[id].Answers[0].Color = Constants.Wrong;
                 }
 
                 return;
@@ -237,18 +235,18 @@ namespace ViewModel
                 {
                     if (questionResult.WrongAnswerChoises.Exists(x => x == j))
                     {
-                        Questions[id].Answers[j].Color = MyEnum.Status.Wrong;
+                        Questions[id].Answers[j].Color = Constants.Wrong;
                     }
                 }
 
                 else
                 {
-                    Questions[id].Answers[j].Color = MyEnum.Status.Wrong;
+                    Questions[id].Answers[j].Color = Constants.Wrong;
                 }
 
                 if (TestToRun.Questions[id].Answers[j].IsItRight)
                 {
-                    Questions[id].Answers[j].Color = MyEnum.Status.Right;
+                    Questions[id].Answers[j].Color = Constants.Right;
                 }
             }
 
@@ -256,17 +254,15 @@ namespace ViewModel
             SelectedQuestion = Questions[id];
         }
 
-
         private RelayCommand finishTest;
         public RelayCommand FinishTest
         {
             get
             {
-                return finishTest ??
-                  (finishTest = new RelayCommand(obj =>
+                return finishTest ??= new RelayCommand(obj =>
                   {
                       EndTest();
-                  }));
+                  });
             }
         }
 
@@ -276,13 +272,12 @@ namespace ViewModel
         {
             get
             {
-                return giveAnswer ??
-                  (giveAnswer = new RelayCommand(obj =>
+                return giveAnswer ??= new RelayCommand(obj =>
                   {
                       QuestionView questionView = obj as QuestionView;
                       Question question = ViewToDataConverter.QuestionConverter(questionView);
 
-                      int id = questionView.QuestionNumber;
+                      int id = questionView.Number;
 
                       QuestionResult questionResult = testsLogic.CheckCurrentQuestion(question, TestToRun.Questions[id], id);
                       SetColorsToQuestion(questionResult);
@@ -292,7 +287,7 @@ namespace ViewModel
                       SelectedQuestion = null;
                       SelectedQuestion = Questions[id];
 
-                  }));
+                  });
             }
         }
 
@@ -304,7 +299,6 @@ namespace ViewModel
 
             timer.Start();
         }
-
 
         private void TimerTick(object sender, EventArgs e)
         {
@@ -324,21 +318,21 @@ namespace ViewModel
 
             Test finishedTest = new Test();
 
-            finishedTest.Name = test.TestName;
+            finishedTest.Name = Test.Name;
             finishedTest.Questions = new List<Question>();
 
             /// TODO Use converter
-            foreach (QuestionView question in test.Questions)
+            foreach (QuestionView question in Test.Questions)
             {
                 question.IsCheсked = true;
 
                 Question questionForSaving = new Question();
-                questionForSaving.QuestionContent = question.QuestionContent;
+                questionForSaving.Content = question.Content;
                 questionForSaving.Answers = new List<Answer>();
 
                 foreach (AnswerView answer in question.Answers)
                 {
-                    questionForSaving.Answers.Add(new Answer { Content = answer.AnswerContent, IsItRight = answer.IsRight });
+                    questionForSaving.Answers.Add(new Answer { Content = answer.Content, IsItRight = answer.IsRight });
                 }
 
                 finishedTest.Questions.Add(questionForSaving);
@@ -356,13 +350,12 @@ namespace ViewModel
         {
             get
             {
-                return showResult ??
-                  (showResult = new RelayCommand(obj =>
+                return showResult ??= new RelayCommand(obj =>
                   {
                       SelectedQuestion = null;
                       ResultVisibility = true;
                       TestRunContent = new TestResultViewModel(testResult);
-                  }));
+                  });
             }
         }
     }

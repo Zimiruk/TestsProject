@@ -1,4 +1,8 @@
-﻿using Common.Models;
+﻿using Business.BusinessModels;
+using Business.Models;
+using Common;
+using Common.Models.Others;
+using Common.Models.TestComponents;
 using Data;
 using System;
 using System.Collections.Generic;
@@ -19,17 +23,39 @@ namespace Business
 
         public List<string> ShowTestsNames()
         {
-            return operations.GetTestsNames();
+            List<string> testsNames = operations.GetTestsNames();
+
+            foreach(string testName in testsNames)
+            {
+                statisticLogic.GetTestStatistic(testName);
+            }
+
+            return testsNames;
         }
 
-        public ObservableCollection<Node> GetListForTree()
+        public List<Node> GetListForTree()
         {
             return operations.GetListForTree();
         }
 
-        public Test GetTest(string testName)
+        public TestExistsReport GetTest(string testName)
         {
-            return operations.GetTest(testName);
+            TestExistsReport testExistsReport = new TestExistsReport();
+
+            if (operations.CheckIfFileExists(testName, Constants.TestPath, Constants.TestExtenstion))
+            {
+                testExistsReport.Result = true;
+                testExistsReport.Message = Constants.AllFine;
+                testExistsReport.Test = operations.GetTest(testName);
+            }
+
+            else
+            {
+                testExistsReport.Result = false;
+                testExistsReport.Message = Constants.NotFoundTestMessage;
+            }
+
+            return testExistsReport;
         }
 
         public bool CheckIfFileExists(string fileName, string fileDirectory, string fileExtention)
@@ -86,7 +112,8 @@ namespace Business
 
             testResult.AmountOfRight = questionsResult.Count - wrongChoisesCount;
 
-            if (rightAmount > testResult.AmountOfRight)
+            testResult.Passed = rightAmount <= testResult.AmountOfRight;
+           /* if (rightAmount > testResult.AmountOfRight)
             {
                 testResult.Passed = false;
             }
@@ -94,7 +121,7 @@ namespace Business
             else
             {
                 testResult.Passed = true;
-            }
+            }*/
 
             testResult.Message = $"{testResult.AmountOfRight} / {questionsResult.Count}";
             return testResult;
@@ -120,9 +147,9 @@ namespace Business
          
         public QuestionResult CheckCurrentQuestion(Question questionWithChoses, Question questionToCompare, int id)
         {
-            QuestionResult questionResult = new QuestionResult {QuestionId = id, IsRight = true, IsOpen = false, NoChoises = false };
+            QuestionResult questionResult = new QuestionResult {Id = id, IsRight = true, IsOpen = false, NoChoises = false };
 
-            if (!questionWithChoses.Answers.Exists(x => x.IsItRight == true))
+            if (!questionWithChoses.Answers.Exists(x => x.IsItRight))
             {
                 questionResult.NoChoises = true;
                 questionResult.IsRight = false;
@@ -153,8 +180,7 @@ namespace Business
                     }
                     else
                     {
-                        questionResult.WrongAnswerChoises = new List<int>();
-                        questionResult.WrongAnswerChoises.Add(i);
+                        questionResult.WrongAnswerChoises = new List<int>(i);
                     }
                 }
             }

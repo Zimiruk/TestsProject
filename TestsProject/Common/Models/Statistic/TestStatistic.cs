@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Common.Models
+namespace Common.Models.Statistic
 {
     [Serializable]
     public class TestStatistic
     {
-        public string TestName { get; set; }
+        public string Name { get; set; }
 
         public int SuccessCount { get; set; }
 
@@ -14,8 +14,8 @@ namespace Common.Models
 
         public List<int> RightAnswersCount { get; set; }
 
-        public List<double> RightAnswersProcent { get; set; }     
+        public List<double> RightAnswersProcent { get; set; }
 
-        public int QuestionAmount { get; set; }        
+        public int QuestionAmount { get; set; }
     }
 }

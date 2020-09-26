@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -13,24 +14,24 @@ namespace ViewModel.Models
             SubThemes = new ObservableCollection<string>();
         }
 
-        private string testName;
-        public string TestName
+        private string name;
+        public string Name
         {
-            get { return testName; }
+            get { return name; }
             set
             {
-                testName = value;
+                name = value;
                 OnPropertyChanged("TestName");
             }
         }
 
-        private string testTheme;
-        public string TestTheme
+        private string theme;
+        public string Theme
         {
-            get { return testTheme; }
+            get { return theme; }
             set
             {
-                testTheme = value;
+                theme = value;
                 OnPropertyChanged("TestTheme");
             }
         }
@@ -65,10 +66,10 @@ namespace ViewModel.Models
             {
                 timerSecond = value;
 
-                if (timerSecond >= 60)
+                if (timerSecond >= Constants.TimeDivision)
                 {
-                    TimerMinute = timerSecond / 60;
-                    TimerSecond = timerSecond % 60;
+                    TimerMinute = timerSecond / Constants.TimeDivision;
+                    TimerSecond = timerSecond % Constants.TimeDivision;
                 }
 
                 OnPropertyChanged("TimerSecond");
@@ -90,15 +91,11 @@ namespace ViewModel.Models
         {
             get
             {
-                string error = String.Empty;
-                switch (columnName)
+                string error = String.Empty;                
+
+                if (columnName == "ToPassAmount" && toPassAmount > Questions.Count)
                 {
-                    case "ToPassAmount":
-                        if (toPassAmount > this.Questions.Count)
-                        {
-                            error = $"{toPassAmount} more than that test quesitons amount";
-                        }
-                        break;
+                    error = $"{toPassAmount} more than that test quesitons amount";
                 }
                 return error;
             }
@@ -110,8 +107,7 @@ namespace ViewModel.Models
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
         public string Error

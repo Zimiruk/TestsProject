@@ -1,11 +1,14 @@
 ﻿using Business;
+using Business.BusinessModels;
 using Common;
-using Common.Models;
+using Common.Models.Others;
+using Common.Models.Statistic;
+using Common.Models.TestComponents;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ViewModel.Commands;
+using ViewModel.Utility;
 
-namespace ViewModel
+namespace ViewModel.ViewModels
 {
     public class TestsListViewModel : BaseViewModel
     {
@@ -15,24 +18,13 @@ namespace ViewModel
         private Test test;
 
         public TestsListViewModel()
-        {
+        {            
+            UpdateLists();
             Node.SendNode += GetNode;
-
-            List<string> testsNames = testsLogic.ShowTestsNames();  
-            nodes = testsLogic.GetListForTree();
-
-            foreach (string name in testsNames)
-            {
-                _testsNames.Add(name);
-            }
         }
 
-        private ObservableCollection<string> _testsNames = new ObservableCollection<string>();
-        public ObservableCollection<string> TestsNames { get { return _testsNames; } }
-
-        private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
-        public ObservableCollection<Node> Nodes { get { return nodes; } }
-
+        public ObservableCollection<string> TestsNames { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Node> Nodes { get; set; } = new ObservableCollection<Node>();
 
         private string selectedTestName;
         public string SelectedTestName
@@ -44,7 +36,9 @@ namespace ViewModel
             set
             {
                 selectedTestName = value;
-                ShowSelectedTest(selectedTestName);    
+                ShowSelectedTest(selectedTestName);
+                selectedTestName = null;
+
                 OnPropertyChanged("SelectedTestName");
             }
         }
@@ -69,16 +63,16 @@ namespace ViewModel
 
             switch (node.NodeType)
             {
-                case MyEnum.Nodes.Test:
+                case Constants.Test:
                     ShowSelectedTest(node.Name);
                     break;
 
-                case MyEnum.Nodes.Theme:
+                case Constants.Theme:
                     statisticByTheme = statisticLogic.GetTestStatisticByTheme(node.Name);
                     TestInformation = new ThemeInformationViewModel(statisticByTheme);
                     break;
 
-                case MyEnum.Nodes.SubTheme:
+                case Constants.SubTheme:
                     statisticByTheme = statisticLogic.GetTestStatisticByTheme(node.DaddyName, node.Name);
                     TestInformation = new ThemeInformationViewModel(statisticByTheme);
                     break;
@@ -87,8 +81,39 @@ namespace ViewModel
 
         private void ShowSelectedTest(string selectedTestName)
         {
-            test = testsLogic.GetTest(selectedTestName);           
-            TestInformation = new SelectedTestViewModel(test);
+            TestExistsReport testExistsReport = testsLogic.GetTest(selectedTestName);
+
+            if (testExistsReport.Result)
+            {
+                test = testExistsReport.Test;
+                TestInformation = new SelectedTestViewModel(test);
+            }
+
+            else
+            {
+                NotificationService.ShowMessageWindow(testExistsReport.Message);
+                UpdateLists();
+            }
+        }
+
+        /// TODO On property changed?
+        private void UpdateLists()
+        {
+            Nodes.Clear();
+
+            List<Node> nodes = testsLogic.GetListForTree();
+            foreach (Node node in nodes)
+            {
+                Nodes.Add(node);
+            }
+
+            TestsNames.Clear();
+
+            List<string> testsNames = testsLogic.ShowTestsNames();
+            foreach (string name in testsNames)
+            {
+                TestsNames.Add(name);
+            }
         }
     }
 }

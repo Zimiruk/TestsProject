@@ -1,5 +1,6 @@
 ﻿using Common;
-using Common.Models;
+using Common.Models.Others;
+using Common.Models.TestComponents;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -11,23 +12,30 @@ namespace Data
     public class TestFilesOperations
     {
         /// TODO Check all methods here
-        /// not working
         public List<TestForList> GetAllTestsNames()
         {
             List<TestForList> tests = new List<TestForList>();
 
             string path = $"{Constants.TestPath}";
+
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+
             BinaryFormatter formatter = new BinaryFormatter();
 
             foreach (string file in Directory.EnumerateFiles(path, "*.test"))
             {
-                using (FileStream fileStream = File.Open(file, FileMode.Open))
+                using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate))
                 {
                     Test test = (Test)formatter.Deserialize(fileStream);
                     tests.Add(new TestForList
                     {
-                        TestName = test?.Name,
-                        TestTheme = test?.Theme,
+                        Name = test?.Name,
+                        Theme = test?.Theme,
                         SubThemes = test?.SubThemes
                     });
                 }
@@ -36,20 +44,23 @@ namespace Data
         }
 
         /// Not sure
-        public ObservableCollection<Node> GetListForTree()
+        public List<Node> GetListForTree()
         {
-            ObservableCollection<Node> nodes = new ObservableCollection<Node>();
+           List<Node> nodes = new List<Node>();
 
             List<TestForList> tests = GetAllTestsNames();
 
-            IEnumerable<string> themes = tests.Select(x => x.TestTheme).Distinct();
+            IEnumerable<string> themes = tests.Select(x => x.Theme).Distinct();
 
             foreach (string theme in themes)
             {
-                Node node = new Node { Name = theme, NodeType = MyEnum.Nodes.Theme, ViewName = $"Theme: {theme}" };
+                Node node = new Node 
+                { 
+                    Name = theme, NodeType = Constants.Theme, ViewName = $"Theme: {theme}" 
+                };
                 node.Nodes = new ObservableCollection<Node>();
 
-                List<TestForList> testsByTheme = tests.FindAll(x => x.TestTheme == theme);
+                List<TestForList> testsByTheme = tests.FindAll(x => x.Theme == theme);
 
                 List<TestForList> testsWithoutSubtheme = testsByTheme.FindAll(x => x.SubThemes.Count == 0);
                 List<TestForList> testsWithSubtheme = testsByTheme.FindAll(x => x.SubThemes.Count > 0);
@@ -58,19 +69,28 @@ namespace Data
 
                 foreach (TestForList test in testsWithoutSubtheme)
                 {
-                    node.Nodes.Add(new Node { Name = test.TestName, DaddyName = node.Name, NodeType = MyEnum.Nodes.Test, ViewName = $"Test: {test.TestName}" });
+                    node.Nodes.Add(new Node 
+                    {
+                        Name = test.Name, DaddyName = node.Name, NodeType = Constants.Test, ViewName = $"Test: {test.Name}" 
+                    });
                 }
 
                 foreach (string subTheme in subThemes)
                 {
-                    Node subNode = new Node { Name = subTheme, DaddyName = node.Name, NodeType = MyEnum.Nodes.SubTheme, ViewName = $"SubTheme: {subTheme}" };
+                    Node subNode = new Node 
+                    { 
+                        Name = subTheme, DaddyName = node.Name, NodeType = Constants.SubTheme, ViewName = $"SubTheme: {subTheme}" 
+                    };
                     subNode.Nodes = new ObservableCollection<Node>();
 
                     List<TestForList> testsWithThatSubTheme = testsWithSubtheme.FindAll(x => x.SubThemes.Contains(subTheme));
 
                     foreach (TestForList test in testsWithThatSubTheme)
                     {
-                        subNode.Nodes.Add(new Node { Name = test.TestName, DaddyName = subNode.Name, NodeType = MyEnum.Nodes.Test, ViewName = $"Test: {test.TestName}" });
+                        subNode.Nodes.Add(new Node 
+                        { 
+                            Name = test.Name, DaddyName = subNode.Name, NodeType = Constants.Test, ViewName = $"Test: {test.Name}" 
+                        });
                     }
 
                     node.Nodes.Add(subNode);
@@ -81,7 +101,6 @@ namespace Data
 
             return nodes;
         }
-               
 
         public List<string> GetTestsNames()
         {
@@ -101,7 +120,7 @@ namespace Data
             ///TODO Exception
             foreach (string file in Directory.EnumerateFiles(path, "*.test"))
             {
-                using (FileStream fileStream = File.Open(file, FileMode.Open))
+                using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate))
                 {
                     Test test = (Test)formatter.Deserialize(fileStream);
                     tests.Add(test.Name);
@@ -128,14 +147,14 @@ namespace Data
                 formatter.Serialize(fileStream, test);
             }
 
-            return "Test Added";
+            return Constants.TestAdded;
         }
 
         public Test GetTest(string testName)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
+            BinaryFormatter formatter = new BinaryFormatter();            
 
-            using (FileStream fileStream = File.Open($"{Constants.TestPath}\\{testName}.test", FileMode.Open))
+            using (FileStream fileStream = File.Open($"{Constants.TestPath}\\{testName}.test", FileMode.OpenOrCreate))
             {
                 Test test = (Test)formatter.Deserialize(fileStream);
                 return test;
@@ -152,13 +171,7 @@ namespace Data
                 dirInfo.Create();
             }
 
-            if (File.Exists($"{fileDirectory}\\{fileName}.{fileExtention}"))
-            {
-                return true;
-            }
-
-            else return false;
+            return File.Exists($"{fileDirectory}\\{fileName}.{fileExtention}");
         }
-
     }
 }
