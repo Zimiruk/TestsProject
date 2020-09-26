@@ -103,7 +103,6 @@ namespace TestsProject
                             break;
                         }
                     }
-
                     else
                     {
                         Console.WriteLine("Bad input");
@@ -116,7 +115,7 @@ namespace TestsProject
         }
 
 
-       private bool AnswerCheck(string input, List<Answer> answers)
+        private bool AnswerCheck(string input, List<Answer> answers)
         {
             int value;
 

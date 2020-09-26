@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="View.Views.TestResultView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:View"
+        mc:Ignorable="d" Background ="AliceBlue">
+
+    <Canvas Width="1080" Height="720">
+        <Label Canvas.Left="25" Canvas.Top="19" FontFamily="Arial Black">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TestResult.Passed}" Value="True">
+                            <Setter Property="Content" Value="PASSED"/>
+                            <Setter Property="Foreground" Value="#67E85C"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TestResult.Passed}" Value="False">
+                            <Setter Property="Content" Value="FAILED"/>
+                            <Setter  Property="Foreground" Value="#FF6E6E"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <Label Content="Right answers:" Canvas.Left="25" Canvas.Top="41">            
+        </Label>
+        <Label Canvas.Left="120" Canvas.Top="41" x:Name="TestResultLabel" Content="{Binding TestResult.Message}">
+        </Label>
+    </Canvas>   
+</UserControl>
