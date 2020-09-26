@@ -22,6 +22,5 @@ namespace ViewModel.ViewModels
                 OnPropertyChanged("selectedThemetStatistic");
             }
         }
-
     }
 }

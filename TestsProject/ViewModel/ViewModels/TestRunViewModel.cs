@@ -176,18 +176,7 @@ namespace ViewModel.ViewModels
                 {
                     questionView.Answers.Add(questionView.IsOpen
                         ? new AnswerView { Content = "", IsRight = true }
-                        : new AnswerView { Content = answer.Content, IsRight = false });
-
-
-                    /*   if (questionView.IsOpen)
-                       {
-                           questionView.Answers.Add(new AnswerView { Content = "", IsRight = true });
-                       }
-
-                       else
-                       {
-                           questionView.Answers.Add(new AnswerView { Content = answer.Content, IsRight = false });
-                       }*/
+                        : new AnswerView { Content = answer.Content, IsRight = false });                   
                 }
             }
 

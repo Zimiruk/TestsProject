@@ -78,7 +78,7 @@ namespace Business
 
             for (int i = 0; i < test.Questions.Count; i++)
             {
-                if (!test.Questions[i].Answers.Exists(x => x.IsItRight == true))
+                if (!test.Questions[i].Answers.Exists(x => x.IsItRight))
                 {
                     executionReport.BadQuestions.Add(i);
                     executionReport.Message += $"Question number {i + 1} does not have any right answer \n";
@@ -112,17 +112,7 @@ namespace Business
 
             testResult.AmountOfRight = questionsResult.Count - wrongChoisesCount;
 
-            testResult.Passed = rightAmount <= testResult.AmountOfRight;
-           /* if (rightAmount > testResult.AmountOfRight)
-            {
-                testResult.Passed = false;
-            }
-
-            else
-            {
-                testResult.Passed = true;
-            }*/
-
+            testResult.Passed = rightAmount <= testResult.AmountOfRight;  
             testResult.Message = $"{testResult.AmountOfRight} / {questionsResult.Count}";
             return testResult;
         }
@@ -147,7 +137,10 @@ namespace Business
          
         public QuestionResult CheckCurrentQuestion(Question questionWithChoses, Question questionToCompare, int id)
         {
-            QuestionResult questionResult = new QuestionResult {Id = id, IsRight = true, IsOpen = false, NoChoises = false };
+            QuestionResult questionResult = new QuestionResult 
+            {
+                Id = id, IsRight = true, IsOpen = false, NoChoises = false 
+            };
 
             if (!questionWithChoses.Answers.Exists(x => x.IsItRight))
             {
