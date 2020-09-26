@@ -255,7 +255,6 @@ namespace ViewModel.ViewModels
             }
         }
 
-        /// Check if possible to bind without id
         private RelayCommand giveAnswer;
         public RelayCommand GiveAnswer
         {
@@ -310,7 +309,6 @@ namespace ViewModel.ViewModels
             finishedTest.Name = Test.Name;
             finishedTest.Questions = new List<Question>();
 
-            /// TODO Use converter
             foreach (QuestionView question in Test.Questions)
             {
                 question.IsCheсked = true;

@@ -1,8 +1,10 @@
 ﻿using Business;
+using Common;
 using Common.Models.Statistic;
 using Common.Models.TestComponents;
 using System;
 using System.Linq;
+using ViewModel.Commands;
 using ViewModel.Models;
 using ViewModel.Utility;
 
@@ -14,7 +16,9 @@ namespace ViewModel.ViewModels
         private StatisticLogic statisticLogic = new StatisticLogic();
 
         private TestStatistic testStatistic;
+
         public CommandParameter Execution { get; set; }
+        public CommandParameter Edit { get; set; }
 
         private Test _test;
 
@@ -31,11 +35,10 @@ namespace ViewModel.ViewModels
 
             SelectedTestStatistic.AttempsCount = testStatistic.AttempsCount;
             SelectedTestStatistic.SuccessCount = testStatistic.SuccessCount;
-
-            /// TODO
+            
             if (testStatistic.AttempsCount > 0)
             {
-                SelectedTestStatistic.SuccessRate = Math.Round((double) testStatistic.SuccessCount * 100 / testStatistic.AttempsCount, 2);
+                SelectedTestStatistic.SuccessRate = Math.Round((double) testStatistic.SuccessCount * Constants.Percent / testStatistic.AttempsCount, 2);
                 SelectedTestStatistic.RightAnswersRate = Math.Round(testStatistic.RightAnswersProcent.AsQueryable().Sum() / testStatistic.AttempsCount, 2);
             }
 
@@ -47,6 +50,11 @@ namespace ViewModel.ViewModels
 
             Execution = new CommandParameter();
             Execution.Test = test;
+            Execution.Direction = Constants.Run;
+
+            Edit = new CommandParameter();
+            Edit.Test = test;
+            Edit.Direction = Constants.Edit;
         }
 
         private TestView selectedTest = new TestView();
@@ -89,6 +97,6 @@ namespace ViewModel.ViewModels
                 questionsCount = value;
                 OnPropertyChanged("QuestionsCount");
             }
-        }
+        }        
     }
 }

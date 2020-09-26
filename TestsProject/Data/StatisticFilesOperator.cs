@@ -7,8 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace Data
 {
     public class StatisticFilesOperator
-    {
-        /// TODO Check all methods here
+    {    
         public bool CheckIfFileExists(string fileName, string fileDirectory, string fileExtention)
         {
             DirectoryInfo dirInfo = new DirectoryInfo(fileDirectory);
@@ -25,7 +24,7 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testName}.dat", FileMode.OpenOrCreate))
+            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testName}.{Constants.StatisticExtenstion}", FileMode.OpenOrCreate))
             {
                 TestStatistic testStatistic = (TestStatistic)formatter.Deserialize(fileStream);
                 return testStatistic;
@@ -36,7 +35,7 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testStatistic.Name}.dat", FileMode.Create))
+            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testStatistic.Name}.{Constants.StatisticExtenstion}", FileMode.Create))
             {
                 formatter.Serialize(fileStream, testStatistic);
             }
@@ -46,7 +45,7 @@ namespace Data
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testStatistic.Name}.dat", FileMode.OpenOrCreate))
+            using (FileStream fileStream = File.Open($"{Constants.StatisticPath}\\{testStatistic.Name}.{Constants.StatisticExtenstion}", FileMode.OpenOrCreate))
             {
                 formatter.Serialize(fileStream, testStatistic);
             }
@@ -54,13 +53,12 @@ namespace Data
 
         public void DeleteStatistic(string testName)
         {
-            if (File.Exists($"{Constants.StatisticPath}\\{testName}.dat"))
+            if (File.Exists($"{Constants.StatisticPath}\\{testName}.{Constants.StatisticExtenstion}"))
             {
-                File.Delete($"{Constants.StatisticPath}\\{testName}.dat");
+                File.Delete($"{Constants.StatisticPath}\\{testName}.{Constants.StatisticExtenstion}");
             }
         }
 
-        /// TODO Check if not Statistic
         public List<TestStatistic> GetAllStatistic()
         {
             List<TestStatistic> statistics = new List<TestStatistic>();
@@ -75,7 +73,7 @@ namespace Data
 
             BinaryFormatter formatter = new BinaryFormatter();
 
-            foreach (string file in Directory.EnumerateFiles(path, "*.dat"))
+            foreach (string file in Directory.EnumerateFiles(path, $"*.{Constants.StatisticExtenstion}"))
             {
                 using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate))
                 {

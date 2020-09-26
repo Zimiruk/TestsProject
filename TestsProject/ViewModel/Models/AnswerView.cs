@@ -12,7 +12,7 @@ namespace ViewModel.Models
             set
             {
                 сontent = value;
-                OnPropertyChanged("AnswerContent");
+                OnPropertyChanged("Content");
             }
         }
 
@@ -37,7 +37,7 @@ namespace ViewModel.Models
             set
             {
                 color = value;
-                OnPropertyChanged("SelectedQuestion");
+                OnPropertyChanged("Color");
             }
         }
 

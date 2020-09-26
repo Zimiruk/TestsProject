@@ -9,21 +9,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Business
-{
-    /// TODO
+{ 
     public class TestsLogic
     {
-        private TestFilesOperations operations = new TestFilesOperations();
+        private TestFilesOperations testFiles = new TestFilesOperations();
         private StatisticLogic statisticLogic = new StatisticLogic();
 
         public void SaveTest(Test test)
         {
-            operations.SaveTest(test);
+            testFiles.SaveTest(test);
         }
 
         public List<string> ShowTestsNames()
         {
-            List<string> testsNames = operations.GetTestsNames();
+            List<string> testsNames = testFiles.GetTestsNames();
 
             foreach(string testName in testsNames)
             {
@@ -35,18 +34,18 @@ namespace Business
 
         public List<Node> GetListForTree()
         {
-            return operations.GetListForTree();
+            return testFiles.GetListForTree();
         }
 
         public TestExistsReport GetTest(string testName)
         {
             TestExistsReport testExistsReport = new TestExistsReport();
 
-            if (operations.CheckIfFileExists(testName, Constants.TestPath, Constants.TestExtenstion))
+            if (testFiles.CheckIfFileExists(testName, Constants.TestPath, Constants.TestExtenstion))
             {
                 testExistsReport.Result = true;
                 testExistsReport.Message = Constants.AllFine;
-                testExistsReport.Test = operations.GetTest(testName);
+                testExistsReport.Test = testFiles.GetTest(testName);
             }
 
             else
@@ -60,7 +59,7 @@ namespace Business
 
         public bool CheckIfFileExists(string fileName, string fileDirectory, string fileExtention)
         {
-            return operations.CheckIfFileExists(fileName, fileDirectory, fileExtention);     
+            return testFiles.CheckIfFileExists(fileName, fileDirectory, fileExtention);     
         }
 
         public CreationReport ValidateCreation(Test test)
@@ -71,7 +70,7 @@ namespace Business
             if (test.Questions.Count == 0)
             {
                 executionReport.Result = false;
-                executionReport.Message += "No questions at all";
+                executionReport.Message += Constants.NoQuestion;
 
                 return executionReport;
             }
@@ -81,13 +80,13 @@ namespace Business
                 if (!test.Questions[i].Answers.Exists(x => x.IsItRight))
                 {
                     executionReport.BadQuestions.Add(i);
-                    executionReport.Message += $"Question number {i + 1} does not have any right answer \n";
+                    executionReport.Message += $"{Constants.BadAnswersBegin} {i + 1} {Constants.BadAnswersEnd}";
                 }
             }
 
             if (executionReport.BadQuestions.Count == 0)
             {
-                executionReport.Message += "All fine";
+                executionReport.Message += Constants.AllFine;
                 executionReport.Result = true;
             }
 
@@ -125,8 +124,7 @@ namespace Business
             {
                 questionsResult.Add(CheckCurrentQuestion(finishedTest.Questions[i], testToCompare.Questions[i], i));
             }
-
-            //TODO RightQuestionsCount
+                   
             TestResult testResult = CreateResult(testToCompare.ToPassAmount, questionsResult);
             testResult.QuestionsResult = questionsResult;
 
@@ -178,6 +176,11 @@ namespace Business
                 }
             }
             return questionResult;
+        }
+
+        public void DeleteTest(string testName)
+        {
+            testFiles.DeleteTest(testName);
         }
     }
 }

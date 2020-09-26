@@ -6,6 +6,12 @@
 
         public const string StatisticPath = "TestsStatistic";
 
+        public const string TestUpdated = "Test updated";
+
+        public const string Edit = "Edit";
+
+        public const string Run = "Run";
+
         public const string Default = "Default";
 
         public const string Wrong = "Wrong";
@@ -36,6 +42,20 @@
 
         public const string StatisticExtenstion = "dat";
 
-        public const string AllFine= "AllFine";
+        public const string AllFine = "AllFine";
+
+        public const string NoQuestion = "No questions at all";
+
+        public const string BadAnswersBegin = "Question number";
+
+        public const string BadAnswersEnd = "does not have any right answer \n";
+
+        public const string TestDelete = "Are you sure u want to delete that test?";
+
+        public const string TestDeleteHeader = "Test delete";
+
+        public const string TestDeleted = "Test deleted";
+
+        public const string Create = "Create";
     }
 }

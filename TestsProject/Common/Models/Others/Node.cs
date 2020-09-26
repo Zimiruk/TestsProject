@@ -49,7 +49,6 @@ namespace Common.Models.Others
             }
         }
 
-        /// Sorry for that   
         public static void OnSelectedItemChanged()
         {
             Node node = SelectedItem as Node;
